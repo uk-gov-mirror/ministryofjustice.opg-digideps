@@ -149,7 +149,8 @@ class ReportRepository extends EntityRepository
 
         $qb
             ->andWhere('c.archivedAt IS NULL')
-            ->andWhere('r.submitted = false OR r.submitted is null');
+            ->andWhere('r.submitted = false OR r.submitted is null')
+            ->andWhere($qb->expr()->notIn('r.type', [Report::TYPE_102, Report::TYPE_103, Report::TYPE_104, Report::TYPE_102_4, Report::TYPE_103_4]));
 
         if ($searchTerm = $query->get('q')) {
             $this->filter->handleSearchTermFilter($searchTerm, $qb, 'c');

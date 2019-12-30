@@ -20,8 +20,8 @@
         {% include 'AppBundle:Report/Report:_codeputies.html.twig' with {coDeputies: coDeputies} %}
     {% endif %}
 
-    {% if client.unsubmittedReport %}
-        {% set report = client.unsubmittedReport %}
+    {% if unsubmittedReport %}
+        {% set report = unsubmittedReport %}
         {% set status = report.status.status %}
         {% set behatRegion = 'report-unsubmitted' %}
         {% set buttonText = 'reviewReport' %}
@@ -38,8 +38,8 @@
     {% endif %}
 
     {# current report #}
-    {% if client.activeReport %}
-        {% set report = client.activeReport %}
+    {% if activeReport %}
+        {% set report = activeReport %}
         {% set status = report.status.status %}
         {% set behatRegion = 'report-active' %}
         {% set buttonText = report.status.status != 'notStarted' ? 'continue' : 'startNow' %}
@@ -58,7 +58,7 @@
     {% endif %}
 
 
-    {% if client.submittedReports %}
+    {% if submittedReports %}
 
         <h2 class="govuk-heading-l govuk-!-margin-top-6">{{ 'submittedReports' | trans({}, 'common') }}</h2>
 
@@ -74,7 +74,7 @@
                 </tr>
             </thead>
             <tbody class="govuk-table__body behat-region-submitted-reports">
-            {% for report in client.submittedReports %}
+            {% for report in submittedReports %}
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         <a href="{{ path('report_review', {reportId: report.id}) }}">

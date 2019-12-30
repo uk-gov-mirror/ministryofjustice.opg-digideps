@@ -818,6 +818,28 @@ class Client
         return $submittedReports;
     }
 
+    public function getSubmittedLayReports()
+    {
+        $submittedReports = [];
+        foreach ($this->getReports() as $report) {
+            if ($report->isSubmitted() && $report->isLayReport()) {
+                $submittedReports[] = $report;
+            }
+        }
+        return $submittedReports;
+    }
+
+    public function getSubmittedOrgReports()
+    {
+        $submittedReports = [];
+        foreach ($this->getReports() as $report) {
+            if ($report->isSubmitted() && !$report->isLayReport()) {
+                $submittedReports[] = $report;
+            }
+        }
+        return $submittedReports;
+    }
+
     /**
      * @return Report|null
      */
@@ -832,6 +854,28 @@ class Client
         return null;
     }
 
+    public function getActiveLayReport()
+    {
+        foreach ($this->getReports() as $report) {
+            if (!$report->isSubmitted() && !$report->getUnSubmitDate() && $report->isLayReport()) {
+                return $report;
+            }
+        }
+
+        return null;
+    }
+
+    public function getActiveOrgReport()
+    {
+        foreach ($this->getReports() as $report) {
+            if (!$report->isSubmitted() && !$report->getUnSubmitDate() && !$report->isLayReport()) {
+                return $report;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @return Report|null
      */
@@ -839,6 +883,28 @@ class Client
     {
         foreach ($this->getReports() as $report) {
             if (!$report->isSubmitted() && $report->getUnSubmitDate()) {
+                return $report;
+            }
+        }
+
+        return null;
+    }
+
+    public function getUnsubmittedLayReport()
+    {
+        foreach ($this->getReports() as $report) {
+            if (!$report->isSubmitted() && $report->getUnSubmitDate() && $report->isLayReport()) {
+                return $report;
+            }
+        }
+
+        return null;
+    }
+
+    public function getUnsubmittedOrgReport()
+    {
+        foreach ($this->getReports() as $report) {
+            if (!$report->isSubmitted() && $report->getUnSubmitDate() && !$report->isLayReport()) {
                 return $report;
             }
         }

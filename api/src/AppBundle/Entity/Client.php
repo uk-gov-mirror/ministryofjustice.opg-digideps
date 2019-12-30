@@ -654,6 +654,15 @@ class Client implements ClientInterface
         }
     }
 
+    public function getCurrentReportByType(string $type)
+    {
+        foreach($this->getReports() as $r) {
+            if (empty($r->getSubmitted()) && empty($r->getUnSubmitDate()) && $r->getType() === $type) {
+                return $r;
+            }
+        }
+    }
+
     /**
      * @return array $reportIds
      */

@@ -1170,4 +1170,12 @@ class Report implements ReportInterface, StartEndDateComparableInterface
             ]
         );
     }
+
+    /**
+     * @return bool true if report is lay type, otherwise false
+     */
+    public function isLayReport()
+    {
+        return in_array($this->getType(), [self::TYPE_102, self::TYPE_103, self::TYPE_104, self::TYPE_102_4, self::TYPE_103_4]);
+    }
 }

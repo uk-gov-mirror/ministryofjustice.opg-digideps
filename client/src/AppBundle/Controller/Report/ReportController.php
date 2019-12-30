@@ -118,6 +118,9 @@ class ReportController extends AbstractController
 
         return [
             'client' => $client,
+            'unsubmittedReport' => $client->getUnsubmittedLayReport(),
+            'activeReport' => $client->getActiveLayReport(),
+            'submittedReports' => $client->getSubmittedLayReports(),
             'coDeputies' => $coDeputies,
         ];
     }

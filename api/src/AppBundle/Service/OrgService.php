@@ -259,9 +259,9 @@ class OrgService
         /** @var Client|null $client */
         $client = $this->clientRepository->findOneBy(['caseNumber' => $caseNumber]);
 
-        if ($client && $this->clientHasLayDeputy($client)) {
-            throw new \RuntimeException('Case number already used');
-        }
+//        if ($client && $this->clientHasLayDeputy($client)) {
+//            throw new \RuntimeException('Case number already used');
+//        }
 
         if ($client && $this->clientHasSwitchedOrganisation($client)) {
             $csvDeputyNo = EntityDir\User::padDeputyNumber($row['Deputy No']);
@@ -375,7 +375,7 @@ class OrgService
             EntityDir\User::$depTypeIdToUserRole[$csvRow['Dep Type']]
         );
 
-        $report = $client->getCurrentReport();
+        $report = $client->getCurrentReportByType($reportType);
 
         // already existing, just change type
         if ($report) {
@@ -392,7 +392,7 @@ class OrgService
 
         $this->log('Creating new report');
         $reportStartDate = ReportUtils::generateReportStartDateFromEndDate($reportEndDate);
-        $report = new EntityDir\Report\Report($client, $reportType, $reportStartDate, $reportEndDate, true);
+        $report = new EntityDir\Report\Report($client, $reportType, $reportStartDate, $reportEndDate, false);
         $client->addReport($report);   //double link for testing reasons
         $this->added['reports'][] = $client->getCaseNumber() . '-' . $reportEndDate->format('Y-m-d');
         $this->em->persist($report);
