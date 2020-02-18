@@ -292,6 +292,11 @@ class User implements UserInterface
     private $coDeputyClientConfirmed;
 
     /**
+     * @ORM\ManyToMany(targetEntity="CourtOrder", mappedBy="users")
+     */
+    private $courtOrders;
+
+    /**
      * Constructor.
      */
     public function __construct($coDeputyClientConfirmed = false)
@@ -300,6 +305,7 @@ class User implements UserInterface
         $this->password = '';
         $this->teams = new ArrayCollection();
         $this->organisations = new ArrayCollection();
+        $this->courtOrders = new ArrayCollection();
         $this->setCoDeputyClientConfirmed($coDeputyClientConfirmed);
     }
 
@@ -723,6 +729,40 @@ class User implements UserInterface
     public function removeOrganisation(Organisation $organisation)
     {
         $this->organisations->removeElement($organisation);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourtOrders()
+    {
+        return $this->courtOrders;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function addCourtOrder(CourtOrder $courtOrder)
+    {
+        if (!$this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->add($courtOrder);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function removeCourtOrder(CourtOrder $courtOrder)
+    {
+        if ($this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->removeElement($courtOrder);
+        }
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity\Report;
 
 use AppBundle\Entity\Client;
+use AppBundle\Entity\CourtOrder;
 use AppBundle\Entity\Ndr\Ndr;
 use AppBundle\Entity\Report\Traits as ReportTraits;
 use AppBundle\Entity\ReportInterface;
@@ -432,6 +433,12 @@ class Report implements ReportInterface
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Report\Checklist", mappedBy="report", cascade={"persist", "remove"})
      */
     private $checklist;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CourtOrder", inversedBy="reports")
+     * @ORM\JoinColumn(name="court_order_id", referencedColumnName="id")
+     */
+    private $courtOrder;
 
     /**
      * Report constructor.
@@ -1324,5 +1331,23 @@ class Report implements ReportInterface
     public function isProfReport()
     {
         return in_array($this->getType(), [self::TYPE_102_5, self::TYPE_103_5, self::TYPE_104_5, self::TYPE_102_4_5, self::TYPE_103_4_5]);
+    }
+
+    /**
+     * @return CourtOrder
+     */
+    public function getCourtOrder()
+    {
+        return $this->courtOrder;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return Report
+     */
+    public function setCourtOrder(CourtOrder $courtOrder)
+    {
+        $this->courtOrder = $courtOrder;
+        return $this;
     }
 }

@@ -67,10 +67,16 @@ class Organisation implements OrganisationInterface
      */
     private $clients;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CourtOrder", mappedBy="organsation")
+     */
+    private $courtOrders;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->courtOrders = new ArrayCollection();
     }
 
     /**
@@ -218,5 +224,39 @@ class Organisation implements OrganisationInterface
     public function containsUser(User $user)
     {
         return $this->users->contains($user);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourtOrders()
+    {
+        return $this->courtOrders;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function addCourtOrder(CourtOrder $courtOrder)
+    {
+        if (!$this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->add($courtOrder);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function removeCourtOrder(CourtOrder $courtOrder)
+    {
+        if ($this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->removeElement($courtOrder);
+        }
+
+        return $this;
     }
 }

@@ -248,6 +248,12 @@ class Client implements ClientInterface
     private $organisation;
 
     /**
+     * @ORM\OneToMany(targetEntity="CourtOrder", mappedBy="client")
+     */
+    private $courtOrders;
+
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -256,6 +262,7 @@ class Client implements ClientInterface
         $this->reports = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->clientContacts = new ArrayCollection();
+        $this->courtOrders = new ArrayCollection();
     }
 
     /**
@@ -1044,5 +1051,39 @@ class Client implements ClientInterface
             return $this->getOrganisation()->containsUser($user);
         }
         return false;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourtOrders()
+    {
+        return $this->courtOrders;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function addCourtOrder(CourtOrder $courtOrder)
+    {
+        if (!$this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->add($courtOrder);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CourtOrder $courtOrder
+     * @return $this
+     */
+    public function removeCourtOrder(CourtOrder $courtOrder)
+    {
+        if ($this->courtOrders->contains($courtOrder)) {
+            $this->courtOrders->removeElement($courtOrder);
+        }
+
+        return $this;
     }
 }
