@@ -3,6 +3,7 @@ namespace AppBundle\DataFixtures;
 
 use AppBundle\Entity\CasRec;
 use AppBundle\Entity\Client;
+use AppBundle\Entity\CourtOrder;
 use AppBundle\Entity\NamedDeputy;
 use AppBundle\Entity\Ndr\Ndr;
 use AppBundle\Entity\Report\Report;
@@ -240,6 +241,14 @@ class UserFixtures extends AbstractDataFixture
             $manager->persist($ndr);
         }
 
+        $order = (new CourtOrder())
+            ->setType($data['reportVariation'] === 'hw' ? CourtOrder::SUBTYPE_HW : CourtOrder::SUBTYPE_PFA)
+            ->setSupervisionLevel($data['reportType'] === 'OPG103' ? CourtOrder::LEVEL_MINIMAL : CourtOrder::LEVEL_GENERAL)
+            ->setDate($client->getCourtDate())
+            ->setClient($client);
+
+        $manager->persist($order);
+
         // Create report for PROF/PA user 2 years ago
         if ($data['deputyType'] === 'PROF' || $data['deputyType'] === 'PA') {
             $realm = $data['deputyType'] === 'PROF' ? CasRec::REALM_PROF : CasRec::REALM_PA;
@@ -249,7 +258,7 @@ class UserFixtures extends AbstractDataFixture
             $endDate = $client->getExpectedReportEndDate();
             $endDate->setDate('2017', intval($endDate->format('m')), intval($endDate->format('d')));
 
-            $report = new Report($client, $type, $startDate, $endDate);
+            $report = new Report($order, $type, $startDate, $endDate);
 
             $manager->persist($report);
 

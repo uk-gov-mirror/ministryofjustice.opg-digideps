@@ -3,6 +3,7 @@ namespace AppBundle\DataFixtures;
 
 use AppBundle\Entity\CasRec;
 use AppBundle\Entity\Client;
+use AppBundle\Entity\CourtOrder;
 use AppBundle\Entity\NamedDeputy;
 use AppBundle\Entity\Ndr\Ndr;
 use AppBundle\Entity\Report\Report;
@@ -611,6 +612,14 @@ class ProfTestUserFixtures extends AbstractDataFixture
 
         $manager->persist($client);
 
+        $order = (new CourtOrder())
+            ->setType($clientData['reportVariation'] === 'hw' ? CourtOrder::SUBTYPE_HW : CourtOrder::SUBTYPE_PFA)
+            ->setSupervisionLevel($clientData['reportType'] === 'OPG103' ? CourtOrder::LEVEL_MINIMAL : CourtOrder::LEVEL_GENERAL)
+            ->setDate($client->getCourtDate())
+            ->setClient($client);
+
+        $manager->persist($order);
+
         if (isset($clientData['ndrEnabled']) && $clientData['ndrEnabled']) {
             $ndr = new Ndr($client);
             $manager->persist($ndr);
@@ -618,7 +627,7 @@ class ProfTestUserFixtures extends AbstractDataFixture
             $type = CasRec::getTypeBasedOnTypeofRepAndCorref($clientData['reportType'], $clientData['reportVariation'], CasRec::REALM_PROF);
             $endDate = \DateTime::createFromFormat('d/m/Y', $clientData['lastReportDate']);
             $startDate = ReportUtils::generateReportStartDateFromEndDate($endDate);
-            $report = new Report($client, $type, $startDate, $endDate);
+            $report = new Report($order, $type, $startDate, $endDate);
 
             $manager->persist($report);
         }
