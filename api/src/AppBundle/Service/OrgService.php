@@ -355,6 +355,8 @@ class OrgService
         $this->em->persist($order);
         $this->em->flush();
 
+        $this->upsertReportFromCsv($csvRow, $order);
+
         return $order;
     }
 
@@ -366,7 +368,7 @@ class OrgService
      *
      * @return EntityDir\Report\Report
      */
-    private function upsertReportFromCsv(array $csvRow, Client $client)
+    private function upsertReportFromCsv(array $csvRow, CourtOrder $courtOrder)
     {
         // find or create reports
         $reportEndDate = ReportUtils::parseCsvDate($csvRow['Last Report Day'], '20');
@@ -380,7 +382,7 @@ class OrgService
             EntityDir\User::$depTypeIdToRealm[$csvRow['Dep Type']]
         );
 
-        $report = $client->getCurrentReport();
+        $report = $courtOrder->getReports()[0];
 
         // already existing, just change type
         if ($report) {
@@ -397,9 +399,8 @@ class OrgService
 
         $this->log('Creating new report');
         $reportStartDate = ReportUtils::generateReportStartDateFromEndDate($reportEndDate);
-        $report = new EntityDir\Report\Report($client, $reportType, $reportStartDate, $reportEndDate, true);
-        $client->addReport($report);   //double link for testing reasons
-        $this->added['reports'][] = $client->getCaseNumber() . '-' . $reportEndDate->format('Y-m-d');
+        $report = new EntityDir\Report\Report($courtOrder, $reportType, $reportStartDate, $reportEndDate, true);
+        $this->added['reports'][] = $courtOrder->getClient()->getCaseNumber() . '-' . $reportEndDate->format('Y-m-d');
         $this->em->persist($report);
         $this->em->flush();
         $this->em->clear();

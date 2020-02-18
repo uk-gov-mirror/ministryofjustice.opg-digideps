@@ -54,7 +54,7 @@ class CourtOrder
 
     /**
      * @var Client
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="courtOrders")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="courtOrders", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     private $client;
@@ -68,7 +68,7 @@ class CourtOrder
 
     /**
      * @var Organisation
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organisation", inversedBy="courtOrders")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organisation", inversedBy="courtOrders", cascade={"persist"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
     private $organisation;
@@ -163,7 +163,7 @@ class CourtOrder
     /**
      * @return ArrayCollection
      */
-    public function getReports(): ArrayCollection
+    public function getReports(): iterable
     {
         return $this->reports;
     }

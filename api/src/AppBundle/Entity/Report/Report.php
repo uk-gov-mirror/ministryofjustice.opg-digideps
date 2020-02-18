@@ -449,16 +449,19 @@ class Report implements ReportInterface
      * @param DateTime $endDate
      * @param bool      $dateChecks if true, perform checks around multiple reports and dates. Useful for PA upload
      */
-    public function __construct(Client $client, $type, DateTime $startDate, DateTime $endDate, $dateChecks = true)
+    public function __construct(CourtOrder $order, $type, DateTime $startDate, DateTime $endDate, $dateChecks = true)
     {
         if (!in_array($type, self::$reportTypes)) {
             throw new \InvalidArgumentException("$type not a valid report type");
         }
         $this->type = $type;
-        $this->client = $client;
+        $this->courtOrder = $order;
+        $this->client = $order->getClient();
         $this->startDate = new DateTime($startDate->format('Y-m-d'), new \DateTimeZone('Europe/London'));
         $this->endDate = new DateTime($endDate->format('Y-m-d'), new \DateTimeZone('Europe/London'));
         $this->updateDueDateBasedOnEndDate();
+
+        $client = $order->getClient();
 
         if ($dateChecks && count($client->getUnsubmittedReports()) > 0) {
             throw new \RuntimeException('Client ' . $client->getId() . ' already has an unsubmitted report. Cannot create another one');
@@ -785,12 +788,12 @@ class Report implements ReportInterface
      */
     public function getClient()
     {
-        return $this->client;
+        return $this->courtOrder->getClient();
     }
 
     public function getClientId()
     {
-        return $this->client->getId();
+        return $this->getClient()->getId();
     }
 
     /**
