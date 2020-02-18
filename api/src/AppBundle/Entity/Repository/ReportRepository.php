@@ -140,18 +140,19 @@ class ReportRepository extends EntityRepository
 
         if ($determinant === self::USER_DETERMINANT) {
             $qb
-                ->select(($select === 'count') ? 'COUNT(DISTINCT r)' : 'r,c')
-                ->leftJoin('r.client', 'c')
-                ->leftJoin('c.users', 'u')->where('u.id = ' . $orgIdsOrUserId);
+                ->select(($select === 'count') ? 'COUNT(DISTINCT r)' : 'r,co,c')
+                ->innerJoin('r.courtOrder', 'co')
+                ->leftJoin('co.deputies', 'd')->where('d.id = ' . $orgIdsOrUserId);
         } else {
             $qb
-                ->select(($select === 'count') ? 'COUNT(DISTINCT r)' : 'r,c,o')
-                ->leftJoin('r.client', 'c')
-                ->leftJoin('c.organisation', 'o')
+                ->select(($select === 'count') ? 'COUNT(DISTINCT r)' : 'r,c,co,o')
+                ->innerJoin('r.courtOrder', 'co')
+                ->innerJoin('co.organisation', 'o')
                 ->where('o.isActivated = true AND o.id in (' . implode(',',$orgIdsOrUserId) .')');
         }
 
         $qb
+            ->innerJoin('co.client', 'c')
             ->andWhere('c.archivedAt IS NULL')
             ->andWhere('r.submitted = false OR r.submitted is null');
 

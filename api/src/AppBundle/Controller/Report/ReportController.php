@@ -644,12 +644,12 @@ class ReportController extends RestController
                 ],
                 'due_date' => $reportDatum['dueDate']->format('Y-m-d'),
                 'client' => [
-                    'id' => $reportDatum['client']['id'],
-                    'firstname' => $reportDatum['client']['firstname'],
-                    'lastname' => $reportDatum['client']['lastname'],
-                    'case_number' => $reportDatum['client']['caseNumber'],
+                    'id' => $reportDatum['courtOrder']['client']['id'],
+                    'firstname' => $reportDatum['courtOrder']['client']['firstname'],
+                    'lastname' => $reportDatum['courtOrder']['client']['lastname'],
+                    'case_number' => $reportDatum['courtOrder']['client']['caseNumber'],
                     'organisation' => [
-                        'name' => $reportDatum['client']['organisation']['name']
+                        'name' => $reportDatum['courtOrder']['client']['organisation']['name']
                     ]
                 ],
             ];
