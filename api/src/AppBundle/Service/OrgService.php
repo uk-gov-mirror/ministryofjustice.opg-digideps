@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity as EntityDir;
 use AppBundle\Entity\Client;
+use AppBundle\Entity\CourtOrder;
 use AppBundle\Entity\NamedDeputy;
 use AppBundle\Entity\Organisation;
 use AppBundle\Entity\Repository\ClientRepository;
@@ -190,7 +191,7 @@ class OrgService
 
                 $client = $this->upsertClientFromCsv($row, $namedDeputy);
                 if ($client instanceof Client) {
-                    $this->upsertReportFromCsv($row, $client);
+                    $this->upsertCourtOrderFromCsv($row, $client, $this->currentOrganisation);
                 } else {
                     throw new \RuntimeException('Client could not be identified or created');
                 }
@@ -248,11 +249,9 @@ class OrgService
      * @param array $row keys: Case, caseNumber, Forename, Surname, Client Adrs1...
      * @param NamedDeputy $namedDeputy the named deputy the client is assigned to
      *
-     * @return Client|null
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @return Client
      */
-    private function upsertClientFromCsv(array $row, NamedDeputy $namedDeputy)
+    private function upsertClientFromCsv(array $row, NamedDeputy $namedDeputy): Client
     {
         // find or create client
         $caseNumber = Client::padCaseNumber(strtolower($row['Case']));
@@ -260,33 +259,13 @@ class OrgService
         /** @var Client|null $client */
         $client = $this->clientRepository->findOneBy(['caseNumber' => $caseNumber]);
 
-        if ($client && $this->clientHasLayDeputy($client)) {
-            throw new \RuntimeException('Case number already used');
-        }
-
-        if ($client && $this->clientHasSwitchedOrganisation($client)) {
-            $csvDeputyNo = EntityDir\User::padDeputyNumber($row['Deputy No']);
-
-            if (is_null($client->getNamedDeputy())) {
-                throw new \RuntimeException('Can\'t determine if deputy has moved with client to new org');
-            } else if ($client->getNamedDeputy()->getDeputyNo() === $csvDeputyNo) {
-                $client->setOrganisation(null);
-            } else {
-                // discharge client and recreate new one
-                $this->dischargeClient($client);
-                unset($client);
-            }
-        }
-
         if (isset($client)) {
             $this->log('FOUND client in database with id: ' . $client->getId());
-            //$client->setUsers(new ArrayCollection());
         } else {
             $this->log('Creating client');
             $client = new Client();
             $client = $this->upsertClientDetailsFromCsv($client, $row);
 
-            $caseNumber = Client::padCaseNumber(strtolower($row['Case']));
             $this->added['clients'][] = $caseNumber;
         }
 
@@ -296,12 +275,7 @@ class OrgService
         // Updating court date to account for updates in casrec
         $client->setCourtDate(new DateTime($row['Made Date']));
 
-        if (null !== $this->currentOrganisation) {
-            $this->attachClientToOrganisation($client);
-        }
-
         $this->em->persist($client);
-
         $this->em->flush();
 
         return $client;
@@ -351,6 +325,37 @@ class OrgService
         }
 
         return $client;
+    }
+
+    private function upsertCourtOrderFromCsv(array $csvRow, Client $client, Organisation $organisation): CourtOrder
+    {
+        $orders = $client->getCourtOrders();
+        $order = null;
+
+        $orderType = $csvRow['corref'] === 'hw' ? CourtOrder::SUBTYPE_HW : CourtOrder::SUBTYPE_PFA;
+        $supervisionLevel = $csvRow['Typeofref'] === 'OPG103' ? CourtOrder::LEVEL_MINIMAL : CourtOrder::LEVEL_GENERAL;
+
+        foreach ($orders as $o) {
+            if ($o->getType() === $orderType && $o->getOrganisation() === $organisation) {
+                $order = $o;
+                break;
+            }
+        }
+
+        if (is_null($order)) {
+            $order = new CourtOrder();
+            $order->setClient($client);
+            $order->setType($orderType);
+            $order->setOrganisation($organisation);
+        }
+
+        $order->setDate(new DateTime($csvRow['Made Date']));
+        $order->setSupervisionLevel($supervisionLevel);
+
+        $this->em->persist($order);
+        $this->em->flush();
+
+        return $order;
     }
 
     /**
