@@ -3,8 +3,11 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Entity\Report\Report;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Court Order
@@ -14,6 +17,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CourtOrder
 {
+    const SUBTYPE_HW = 'hw';
+    const SUBTYPE_PFA = 'pfa';
+
+    const LEVEL_MINIMAL = 'MINIMAL';
+    const LEVEL_GENERAL = 'GENERAL';
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -22,6 +31,26 @@ class CourtOrder
      * @ORM\SequenceGenerator(sequenceName="court_order_id_seq", allocationSize=1, initialValue=1)
      */
     private $id;
+
+    /**
+     * @var string
+     * @Assert\Choice({CourtOrder::SUBTYPE_HW, CourtOrder::SUBTYPE_PFA})
+     * @ORM\Column(name="type", type="string", nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var string
+     * @Assert\Choice({CourtOrder::LEVEL_MINIMAL, CourtOrder::LEVEL_GENERAL})
+     * @ORM\Column(name="supervision_level", type="string", nullable=false)
+     */
+    private $supervisionLevel;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(name="date", type="date", nullable=false)
+     */
+    private $date;
 
     /**
      * @var Client
@@ -144,6 +173,50 @@ class CourtOrder
         if (!$this->reports->contains($report)) {
             $this->reports->add($report);
         }
+
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): CourtOrder
+    {
+        if (!in_array($type, [self::SUBTYPE_HW, self::SUBTYPE_PFA])) {
+            throw new InvalidArgumentException('Invalid CourtOrder type');
+        }
+
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getSupervisionLevel(): string
+    {
+        return $this->supervisionLevel;
+    }
+
+    public function setSupervisionLevel(string $supervisionLevel): CourtOrder
+    {
+        if (!in_array($supervisionLevel, [self::LEVEL_GENERAL, self::LEVEL_MINIMAL])) {
+            throw new InvalidArgumentException('Invalid CourtOrder supervision level');
+        }
+
+        $this->supervisionLevel = $supervisionLevel;
+
+        return $this;
+    }
+
+    public function getDate(): DateTime
+    {
+        return $this->date;
+    }
+
+    public function setDate(DateTime $date): CourtOrder
+    {
+        $this->date = $date;
 
         return $this;
     }
