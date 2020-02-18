@@ -1,14 +1,14 @@
 <?php
 namespace AppBundle\Security;
 
-use AppBundle\Entity\Client;
 use AppBundle\Entity\Organisation;
+use AppBundle\Entity\Report\Report;
 use AppBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
-class ClientVoter extends Voter
+class ReportVoter extends Voter
 {
     /** @var string */
     const VIEW = 'view';
@@ -34,16 +34,16 @@ class ClientVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, [self::VIEW, self::EDIT]) && $subject instanceof Client;
+        return in_array($attribute, [self::VIEW, self::EDIT]) && $subject instanceof Report;
     }
 
     /**
      * @param string $attribute
-     * @param Client $client
+     * @param Report $report
      * @param TokenInterface $token
      * @return bool
      */
-    protected function voteOnAttribute($attribute, $client, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $report, TokenInterface $token)
     {
         $user = $token->getUser();
 
@@ -55,10 +55,8 @@ class ClientVoter extends Voter
 
         switch ($attribute) {
             case self::VIEW:
-                return $this->canView($client, $user);
-
             case self::EDIT:
-                return $this->security->isGranted('ROLE_ADMIN');
+                return $this->canManage($report, $user);
 
             default:
                 throw new \LogicException('This code should not be reached!');
@@ -66,25 +64,23 @@ class ClientVoter extends Voter
     }
 
     /**
-     * @param Client $client
+     * @param Report $report
      * @param User $user
      * @return bool
      */
-    private function canView(Client $client, User $user)
+    private function canManage(Report $report, User $user)
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        foreach ($client->getCourtOrders() as $order) {
-            if ($order->getDeputies()->contains($user)) {
-                return true;
-            }
+        if ($report->getCourtOrder()->getDeputies()->contains($user)) {
+            return true;
+        }
 
-            $organisation = $order->getOrganisation();
-            if ($organisation instanceof Organisation && $organisation->isActivated() && $organisation->containsUser($user)) {
-                return true;
-            }
+        $organisation = $report->getCourtOrder()->getOrganisation();
+        if ($organisation instanceof Organisation && $organisation->isActivated() && $organisation->containsUser($user)) {
+            return true;
         }
 
         return false;

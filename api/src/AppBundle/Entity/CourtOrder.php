@@ -124,7 +124,7 @@ class CourtOrder
     /**
      * @return ArrayCollection
      */
-    public function getDeputies(): ArrayCollection
+    public function getDeputies(): iterable
     {
         return $this->deputies;
     }
