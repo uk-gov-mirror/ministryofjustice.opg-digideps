@@ -235,4 +235,3 @@ class DeputyDto
         return $this;
     }
 }
-

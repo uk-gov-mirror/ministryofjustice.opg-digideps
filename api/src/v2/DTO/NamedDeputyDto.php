@@ -378,4 +378,3 @@ class NamedDeputyDto
     }
 
 }
-

@@ -4,9 +4,9 @@ services:
         autoconfigure: true
 
     AppBundle\:
-        resource: "@AppBundle/*"
-        exclude: '@AppBundle/{Entity,Migrations,Tests,Kernel.php}'
+        resource: "../../../src/*"
+        exclude: '../../../src/{Entity,Migrations,Tests,Kernel.php}'
 
     AppBundle\Controller\:
-        resource: "@AppBundle/Controller/*"
+        resource: "../../../src/Controller"
         tags: [controller.service_arguments]
