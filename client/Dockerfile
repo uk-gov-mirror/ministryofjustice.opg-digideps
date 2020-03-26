@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 COPY webpack.config.js .
-COPY src src
+COPY assets assets
 
 # Install NPM dependencies
 RUN npm install
@@ -86,7 +86,9 @@ COPY --from=composer /app/vendor vendor
 COPY --from=composer /app/composer.lock composer.lock
 COPY scripts scripts
 COPY src src
+COPY templates templates
 COPY tests tests
+COPY translations translations
 COPY web web
 COPY --from=webpack /app/web/assets web/assets
 COPY --from=webpack /app/web/images web/images

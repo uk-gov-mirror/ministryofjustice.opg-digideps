@@ -68,7 +68,9 @@ services:
             - ./client/app/config/services.yml:/var/www/app/config/services.yml
             - ./client/app/config/services:/var/www/app/config/services
             - ./client/src:/var/www/src:ro
+            - ./client/templates:/var/www/templates
             - ./client/tests:/var/www/tests
+            - ./client/translations:/var/www/translations
             - ./client/phpstan.neon:/var/www/phpstan.neon
         environment:
             VIRTUAL_HOST: www.digideps.local,digideps.local
@@ -98,7 +100,9 @@ services:
             - ./client/app/config/services.yml:/var/www/app/config/services.yml
             - ./client/app/config/services:/var/www/app/config/services
             - ./client/src:/var/www/src:ro
+            - ./client/templates:/var/www/templates
             - ./client/tests:/var/www/tests
+            - ./client/translations:/var/www/translations
             - ./client/phpstan.neon:/var/www/phpstan.neon
         environment:
             VIRTUAL_HOST: admin.digideps.local

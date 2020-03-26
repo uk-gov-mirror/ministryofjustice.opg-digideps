@@ -345,7 +345,7 @@ class DocumentServiceTest extends TestCase
         $missingDocuments = [$missingDoc1, $missingDoc2, $missingDoc3];
         $missingDocumentCaseNumbers = ['CaseNumber1', 'CaseNumber2', 'CaseNumber1'];
 
-        $loader = new FilesystemLoader([__DIR__ . '/../../../src/AppBundle/Resources/views/FlashMessages']);
+        $loader = new FilesystemLoader([__DIR__ . '/../../../src/templates/FlashMessages']);
 
         $sut = new Environment($loader);
 
