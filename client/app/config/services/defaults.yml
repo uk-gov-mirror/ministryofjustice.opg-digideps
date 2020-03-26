@@ -6,9 +6,9 @@ services:
             Predis\ClientInterface: '@snc_redis.default'
 
     AppBundle\:
-        resource: "@AppBundle/*"
-        exclude: '@AppBundle/{Entity}'
+        resource: "../../../src/*"
+        exclude: '../../../src/{Entity}'
 
     AppBundle\Controller\:
-        resource: "@AppBundle/Controller/*"
+        resource: "../../../src/Controller"
         tags: [controller.service_arguments]

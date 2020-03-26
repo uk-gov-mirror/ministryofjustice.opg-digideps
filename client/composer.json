@@ -4,8 +4,14 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-0": { "": "src/" },
-        "psr-4": { "DigidepsTests\\": "tests/phpunit" }
+        "psr-4": {
+            "AppBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DigidepsTests\\": "tests/phpunit"
+        }
     },
     "require": {
         "php": ">=7.3.5",

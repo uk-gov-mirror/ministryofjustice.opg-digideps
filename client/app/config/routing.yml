@@ -1,7 +1,7 @@
 app:
-    resource: "@AppBundle/Controller/"
+    resource: "../src/Controller/"
     type:     annotation
-    
+
 logout:
     path: /logout
 
