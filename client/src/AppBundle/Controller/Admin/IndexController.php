@@ -47,7 +47,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="admin_homepage")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:index.html.twig")
+     * @Template("Admin/Index/index.html.twig")
      */
     public function indexAction(Request $request)
     {
@@ -80,7 +80,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/user-add", name="admin_add_user")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:addUser.html.twig")
+     * @Template("Admin/Index/addUser.html.twig")
      */
     public function addUserAction(Request $request)
     {
@@ -119,7 +119,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/edit-user", name="admin_editUser", methods={"GET", "POST"})
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:editUser.html.twig")
+     * @Template("Admin/Index/editUser.html.twig")
      *
      * @param Request $request
      * @return array|Response
@@ -140,13 +140,13 @@ class IndexController extends AbstractController
             $user = $this->getRestClient()->get("user/{$filter}", "User", $groups);
 
         } catch (\Throwable $e) {
-            return $this->render('AppBundle:Admin/Index:error.html.twig', [
+            return $this->render('Admin/Index/error.html.twig', [
                 'error' => 'User not found',
             ]);
         }
 
         if ($user->getRoleName() == EntityDir\User::ROLE_ADMIN && !$this->isGranted(EntityDir\User::ROLE_ADMIN)) {
-            return $this->render('AppBundle:Admin/Index:error.html.twig', [
+            return $this->render('Admin/Index/error.html.twig', [
                 'error' => 'Non-admin cannot edit admin users',
             ]);
         }
@@ -227,7 +227,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/delete-confirm/{id}", name="admin_delete_confirm", methods={"GET"})
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:deleteConfirm.html.twig")
+     * @Template("Admin/Index/deleteConfirm.html.twig")
      *
      * @param int $id
      *
@@ -263,7 +263,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/upload", name="admin_upload")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:upload.html.twig")
+     * @Template("Admin/Index/upload.html.twig")
      */
     public function uploadAction(Request $request, RouterInterface $router)
     {
@@ -297,7 +297,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/casrec-upload", name="casrec_upload")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:uploadUsers.html.twig")
+     * @Template("Admin/Index/uploadUsers.html.twig")
      */
     public function uploadUsersAction(Request $request)
     {
@@ -372,7 +372,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/casrec-mld-upgrade", name="casrec_mld_upgrade")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:upgradeMld.html.twig")
+     * @Template("Admin/Index/upgradeMld.html.twig")
      */
     public function upgradeMldAction(Request $request)
     {
@@ -423,7 +423,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/org-csv-upload", name="admin_org_upload")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Index:uploadOrgUsers.html.twig")
+     * @Template("Admin/Index/uploadOrgUsers.html.twig")
      */
     public function uploadOrgUsersAction(Request $request)
     {

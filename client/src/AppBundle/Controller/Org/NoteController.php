@@ -20,7 +20,7 @@ class NoteController extends AbstractController
 
     /**
      * @Route("add", name="add_note")
-     * @Template("AppBundle:Org/ClientProfile:addNote.html.twig")
+     * @Template("Org/ClientProfile/addNote.html.twig")
      */
     public function addAction(Request $request)
     {
@@ -62,7 +62,7 @@ class NoteController extends AbstractController
 
     /**
      * @Route("{noteId}/edit", name="edit_note")
-     * @Template("AppBundle:Org/ClientProfile:editNote.html.twig")
+     * @Template("Org/ClientProfile/editNote.html.twig")
      */
     public function editAction(Request $request, $noteId)
     {
@@ -102,7 +102,7 @@ class NoteController extends AbstractController
      * Confirm delete user form
      *
      * @Route("{noteId}/delete", name="delete_note")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      */
     public function deleteConfirmAction(Request $request, $noteId, $confirmed = false)
     {

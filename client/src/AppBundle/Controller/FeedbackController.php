@@ -12,7 +12,7 @@ class FeedbackController extends AbstractController
 {
     /**
      * @Route("/feedback", name="feedback")
-     * @Template("AppBundle:Feedback:index.html.twig")
+     * @Template("Feedback/index.html.twig")
      */
     public function indexAction(Request $request)
     {

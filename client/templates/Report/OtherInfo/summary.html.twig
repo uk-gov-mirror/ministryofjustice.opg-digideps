@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig'%}
+{% extends 'Layouts/application.html.twig'%}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-more-info" %}
 {% trans_default_domain translationDomain %}
@@ -40,10 +40,10 @@
     </div>
 
     {# Questions and answers table #}
-    {% include 'AppBundle:Report/OtherInfo:_answers.html.twig' %}
+    {% include 'Report/OtherInfo/_answers.html.twig' %}
 
     {# Pagination #}
-    {% include 'AppBundle:Report:_nextprevious.html.twig' with {
+    {% include 'Report/_nextprevious.html.twig' with {
         'report': report,
         'sectionId': 'otherInfo',
     } %}

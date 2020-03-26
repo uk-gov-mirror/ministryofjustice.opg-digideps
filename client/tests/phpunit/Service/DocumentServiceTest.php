@@ -302,7 +302,7 @@ class DocumentServiceTest extends TestCase
         $expectedFlash = 'some flash message here';
 
         $this->twig
-            ->render('AppBundle:FlashMessages:missing-documents.html.twig', ['missingDocuments' => $missingDocuments])
+            ->render('FlashMessages/missing-documents.html.twig', ['missingDocuments' => $missingDocuments])
             ->shouldBeCalled()
             ->willReturn($expectedFlash);
 

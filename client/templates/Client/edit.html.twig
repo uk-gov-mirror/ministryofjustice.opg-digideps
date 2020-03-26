@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig'%}
+{% extends 'Layouts/application.html.twig'%}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "client" %}
 {% trans_default_domain translationDomain %}
@@ -32,7 +32,7 @@
 
     {{ form_submit(form.save,'save', {'buttonClass' : ''}) }}
 
-    {% include 'AppBundle:Components/Link:_link-button.html.twig' with {
+    {% include 'Components/Link/_link-button.html.twig' with {
         transDomain: translationDomain,
         linkButtonLabel: 'form.editClientForm.controls.cancel.label',
         linkHref: path('client_show')

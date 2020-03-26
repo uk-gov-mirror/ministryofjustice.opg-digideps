@@ -22,7 +22,7 @@ class FixtureController extends AbstractController
     /**
      * @Route("/court-orders", name="admin_fixtures_court_orders")
      * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Fixtures:courtOrders.html.twig")
+     * @Template("Admin/Fixtures/courtOrders.html.twig")
      */
     public function courtOrdersAction(Request $request, KernelInterface $kernel)
     {

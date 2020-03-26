@@ -89,7 +89,7 @@ class ReportController extends AbstractController
      *
      * @Route("/lay", name="lay_home")
      * //TODO we should add Security("has_role('ROLE_LAY_DEPUTY')") here, but not sure as not clear what "getCorrectRouteIfDifferent" does
-     * @Template("AppBundle:Report/Report:index.html.twig")
+     * @Template("Report/Report/index.html.twig")
      */
     public function indexAction(Request $request)
     {
@@ -126,7 +126,7 @@ class ReportController extends AbstractController
      * Edit single report
      *
      * @Route("/reports/edit/{reportId}", name="report_edit")
-     * @Template("AppBundle:Report/Report:edit.html.twig")
+     * @Template("Report/Report/edit.html.twig")
      */
     public function editAction(Request $request, $reportId)
     {
@@ -169,7 +169,7 @@ class ReportController extends AbstractController
      *   defaults={ "action" = "create"},
      *   requirements={ "action" = "(create|add)"}
      * )
-     * @Template("AppBundle:Report/Report:create.html.twig")
+     * @Template("Report/Report/create.html.twig")
      */
     public function createAction(Request $request, $clientId, $action = false)
     {
@@ -207,7 +207,7 @@ class ReportController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/overview", name="report_overview")
-     * @Template("AppBundle:Report/Report:overview.html.twig")
+     * @Template("Report/Report/overview.html.twig")
      */
     public function overviewAction(Request $request, $reportId)
     {
@@ -232,7 +232,7 @@ class ReportController extends AbstractController
         $activeReportId = null;
         if ($user->isDeputyOrg()) {
             // PR and PROF: unsubmitted at the top (if exists), active below (
-            $template = 'AppBundle:Org/ClientProfile:overview.html.twig';
+            $template = 'Org/ClientProfile/overview.html.twig';
 
             // if there is an unsubmitted report, swap them, so linkswill both show the unsubmitted first
             $unsubmittedReport = $client->getUnsubmittedReport();
@@ -246,7 +246,7 @@ class ReportController extends AbstractController
             }
 
         } else { // Lay. keep the report Id
-            $template = 'AppBundle:Report/Report:overview.html.twig';
+            $template = 'Report/Report/overview.html.twig';
         }
 
         $report = $this->getReportIfNotSubmitted($reportId, $reportJmsGroup);
@@ -315,7 +315,7 @@ class ReportController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/declaration", name="report_declaration")
-     * @Template("AppBundle:Report/Report:declaration.html.twig")
+     * @Template("Report/Report/declaration.html.twig")
      */
     public function declarationAction(Request $request, $reportId)
     {
@@ -365,7 +365,7 @@ class ReportController extends AbstractController
      * Page displaying the report has been submitted.
      *
      * @Route("/report/{reportId}/submitted", name="report_submit_confirmation")
-     * @Template("AppBundle:Report/Report:submitConfirmation.html.twig")
+     * @Template("Report/Report/submitConfirmation.html.twig")
      */
     public function submitConfirmationAction(Request $request, $reportId)
     {
@@ -410,7 +410,7 @@ class ReportController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/submit_feedback", name="report_submit_feedback")
-     * @Template("AppBundle:Report/Report:submitFeedback.html.twig")
+     * @Template("Report/Report/submitFeedback.html.twig")
      */
     public function submitFeedbackAction($reportId)
     {
@@ -434,7 +434,7 @@ class ReportController extends AbstractController
      * Used for active and archived report.
      *
      * @Route("/report/{reportId}/review", name="report_review")
-     * @Template("AppBundle:Report/Report:review.html.twig")
+     * @Template("Report/Report/review.html.twig")
      */
     public function reviewAction($reportId)
     {
@@ -475,7 +475,7 @@ class ReportController extends AbstractController
         /** @var Report $report */
         $report = $this->getReport($reportId, self::$reportGroupsAll);
 
-        return $this->render('AppBundle:Report/Formatted:formatted_standalone.html.twig', [
+        return $this->render('Report/Formatted/formatted_standalone.html.twig', [
             'report' => $report,
             'showSummary' => true
         ]);

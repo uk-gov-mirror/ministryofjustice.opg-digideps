@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "ndr-deputy-expenses" %}
 {% trans_default_domain translationDomain %}
@@ -22,7 +22,7 @@
 
     <p class="text">{{ 'addPage.pageSectionDescription' | trans(transOptions) }}</p>
 
-    {% include 'AppBundle:Ndr/DeputyExpense:_form.html.twig' with {
+    {% include 'Ndr/DeputyExpense/_form.html.twig' with {
 	    'translationDomain': translationDomain,
 	    'form': form
     } %}

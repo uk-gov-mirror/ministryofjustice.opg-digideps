@@ -24,7 +24,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("", name="pa_fee_expense")
-     * @Template("AppBundle:Report/PaFeeExpense:start.html.twig")
+     * @Template("Report/PaFeeExpense/start.html.twig")
      *
      * @param int $reportId
      *
@@ -45,7 +45,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/fee-exist", name="pa_fee_expense_fee_exist")
-     * @Template("AppBundle:Report/PaFeeExpense:feeExist.html.twig")
+     * @Template("Report/PaFeeExpense/feeExist.html.twig")
      */
     public function feeExistAction(Request $request, $reportId)
     {
@@ -79,7 +79,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/fee-edit", name="pa_fee_expense_fee_edit")
-     * @Template("AppBundle:Report/PaFeeExpense:feeEdit.html.twig")
+     * @Template("Report/PaFeeExpense/feeEdit.html.twig")
      */
     public function feeEditAction(Request $request, $reportId)
     {
@@ -111,7 +111,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/other/exist", name="pa_fee_expense_other_exist")
-     * @Template("AppBundle:Report/PaFeeExpense:otherExist.html.twig")
+     * @Template("Report/PaFeeExpense/otherExist.html.twig")
      */
     public function otherExistAction(Request $request, $reportId)
     {
@@ -151,7 +151,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/other/add", name="pa_fee_expense_other_add")
-     * @Template("AppBundle:Report/PaFeeExpense:otherAdd.html.twig")
+     * @Template("Report/PaFeeExpense/otherAdd.html.twig")
      */
     public function otherAddAction(Request $request, $reportId)
     {
@@ -194,7 +194,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/other/add-another", name="pa_fee_expense_add_another")
-     * @Template("AppBundle:Report/PaFeeExpense:otherAddAnother.html.twig")
+     * @Template("Report/PaFeeExpense/otherAddAnother.html.twig")
      */
     public function otherAddAnotherAction(Request $request, $reportId)
     {
@@ -220,7 +220,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/other-edit/{expenseId}", name="pa_fee_expense_edit")
-     * @Template("AppBundle:Report/PaFeeExpense:otherEdit.html.twig")
+     * @Template("Report/PaFeeExpense/otherEdit.html.twig")
      *
      * @param Request $request
      * @param $reportId
@@ -261,7 +261,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/other/delete/{expenseId}", name="pa_fee_expense_delete")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      *
      * @param Request $request
      * @param $reportId
@@ -304,7 +304,7 @@ class PaFeeExpenseController extends AbstractController
 
     /**
      * @Route("/summary", name="pa_fee_expense_summary")
-     * @Template("AppBundle:Report/PaFeeExpense:summary.html.twig")
+     * @Template("Report/PaFeeExpense/summary.html.twig")
      *
      * @param int $reportId
      *

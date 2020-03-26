@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-overview" %}
 {% trans_default_domain translationDomain %}
@@ -24,7 +24,7 @@
 
     {# Use a random ID to ensure that changes to open sections don't persist #}
     <div class="govuk-accordion" data-module="govuk-accordion" id="overview-accordion-{{ "now" | date("U") }}">
-        {% include 'AppBundle:Org/ClientProfile:_client.html.twig' with {
+        {% include 'Org/ClientProfile/_client.html.twig' with {
         '   client': client
         } %}
 
@@ -46,12 +46,12 @@
             </div>
             <div class="govuk-accordion__section-content">
                 {% if app.user.isDeputyProf %}
-                    {% include 'AppBundle:Org/ClientProfile:_reportDetail-Prof.html.twig' with {
+                    {% include 'Org/ClientProfile/_reportDetail-Prof.html.twig' with {
                     'report': report,
                     'incomplete': activeReport ? true : false
                     } %}
                 {% else %}
-                    {% include 'AppBundle:Org/ClientProfile:_reportDetail-PA.html.twig' with {
+                    {% include 'Org/ClientProfile/_reportDetail-PA.html.twig' with {
                     'report': report,
                     'incomplete': activeReport ? true : false
                     } %}
@@ -73,12 +73,12 @@
 
                 <div class="govuk-accordion__section-content">
                     {% if app.user.isDeputyProf %}
-                        {% include 'AppBundle:Org/ClientProfile:_reportDetail-Prof.html.twig' with {
+                        {% include 'Org/ClientProfile/_reportDetail-Prof.html.twig' with {
                         'report': activeReport,
                         'incomplete': false
                         } %}
                     {% else %}
-                        {% include 'AppBundle:Org/ClientProfile:_reportDetail-PA.html.twig' with {
+                        {% include 'Org/ClientProfile/_reportDetail-PA.html.twig' with {
                         'report': activeReport,
                         'incomplete': false
                         } %}
@@ -87,17 +87,17 @@
             </details>
         {% endif %}
 
-        {% include 'AppBundle:Org/ClientProfile:_notes.html.twig' with {
+        {% include 'Org/ClientProfile/_notes.html.twig' with {
             'notes': client.notes,
             'client': client
         } %}
 
-        {% include 'AppBundle:Org/ClientProfile:_contacts.html.twig' with {
+        {% include 'Org/ClientProfile/_contacts.html.twig' with {
             'contacts': client.clientContacts,
                 ' client': client
         } %}
 
-        {% include 'AppBundle:Org/ClientProfile:_reports.html.twig' with {
+        {% include 'Org/ClientProfile/_reports.html.twig' with {
             'reports': client.submittedReports,
                 'client': client
         } %}

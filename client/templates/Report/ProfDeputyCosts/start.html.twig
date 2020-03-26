@@ -1,11 +1,11 @@
-{% extends 'AppBundle:Layouts:application.html.twig'%}
+{% extends 'Layouts/application.html.twig'%}
 {% set transOptions = {
     '%client%': report.client.firstname | e,
     '%periodStartDate%': report.startDate | date("j F Y"),
     '%periodEndDate%': report.endDate | date("j F Y")
 } %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-prof-deputy-costs" %}
 {% trans_default_domain translationDomain %}
@@ -34,7 +34,7 @@
     <a href="{{ path('prof_deputy_costs_how_charged', { 'reportId': report.id}) }}" class="button button-start behat-link-start">{{ (page ~ '.startButton') | trans }}</a>
 
     {# Pagination #}
-    {% include 'AppBundle:Report:_nextprevious.html.twig' with {
+    {% include 'Report/_nextprevious.html.twig' with {
         'report': report,
         'sectionId': 'profDeputyCosts',
     } %}

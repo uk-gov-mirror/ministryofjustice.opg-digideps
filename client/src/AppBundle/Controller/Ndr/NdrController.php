@@ -48,7 +48,7 @@ class NdrController extends AbstractController
      * //TODO move view into Ndr directory when branches are integrated.
      *
      * @Route("/ndr", name="ndr_index")
-     * @Template("AppBundle:Ndr/Ndr:index.html.twig")
+     * @Template("Ndr/Ndr/index.html.twig")
      */
     public function indexAction()
     {
@@ -79,7 +79,7 @@ class NdrController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/overview", name="ndr_overview")
-     * @Template("AppBundle:Ndr/Ndr:overview.html.twig")
+     * @Template("Ndr/Ndr/overview.html.twig")
      */
     public function overviewAction($ndrId)
     {
@@ -116,7 +116,7 @@ class NdrController extends AbstractController
      * Used for active and archived NDRs.
      *
      * @Route("/ndr/{ndrId}/review", name="ndr_review")
-     * @Template("AppBundle:Ndr/Ndr:review.html.twig")
+     * @Template("Ndr/Ndr/review.html.twig")
      */
     public function reviewAction($ndrId)
     {
@@ -174,7 +174,7 @@ class NdrController extends AbstractController
     private function getPdfBinaryContent($ndr)
     {
         /** @var string */
-        $html = $this->render('AppBundle:Ndr/Formatted:formatted_standalone.html.twig', [
+        $html = $this->render('Ndr/Formatted/formatted_standalone.html.twig', [
             'ndr' => $ndr, 'adLoggedAsDeputy' => $this->isGranted(User::ROLE_AD)
         ])->getContent();
 
@@ -187,7 +187,7 @@ class NdrController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/declaration", name="ndr_declaration")
-     * @Template("AppBundle:Ndr/Ndr:declaration.html.twig")
+     * @Template("Ndr/Ndr/declaration.html.twig")
      */
     public function declarationAction(Request $request, $ndrId)
     {
@@ -256,7 +256,7 @@ class NdrController extends AbstractController
      * Page displaying the report has been submitted.
      *
      * @Route("/ndr/{ndrId}/submitted", name="ndr_submit_confirmation")
-     * @Template("AppBundle:Ndr/Ndr:submitConfirmation.html.twig")
+     * @Template("Ndr/Ndr/submitConfirmation.html.twig")
      */
     public function submitConfirmationAction(Request $request, $ndrId)
     {
@@ -309,7 +309,7 @@ class NdrController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/submit_feedback", name="ndr_submit_feedback")
-     * @Template("AppBundle:Report:Report/submitFeedback.html.twig")
+     * @Template("Report/Report/submitFeedback.html.twig")
      */
     public function submitFeedbackAction($ndrId)
     {

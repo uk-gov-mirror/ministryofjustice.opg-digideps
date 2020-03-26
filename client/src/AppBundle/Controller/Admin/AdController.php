@@ -18,7 +18,7 @@ class AdController extends AbstractController
     /**
      * @Route("/", name="ad_homepage")
      * @Security("has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Ad:index.html.twig")
+     * @Template("Admin/Ad/index.html.twig")
      */
     public function indexAction(Request $request)
     {
@@ -74,7 +74,7 @@ class AdController extends AbstractController
     /**
      * @Route("/view-user", name="ad_view_user", methods={"GET", "POST"})
      * @Security("has_role('ROLE_AD')")
-     * @Template("AppBundle:Admin/Ad:viewUser.html.twig")
+     * @Template("Admin/Ad/viewUser.html.twig")
      *
      * @param Request $request
      */
@@ -86,13 +86,13 @@ class AdController extends AbstractController
         try {
             $user = $this->getRestClient()->get("user/get-one-by/{$what}/{$filter}", 'User', ['user', 'client', 'client-reports', 'report', 'ndr']);
         } catch (\Throwable $e) {
-            return $this->render('AppBundle:Admin/Ad:error.html.twig', [
+            return $this->render('Admin/Ad/error.html.twig', [
                 'error' => 'User not found',
             ]);
         }
 
         if ($user->getRoleName() != EntityDir\User::ROLE_LAY_DEPUTY) {
-            return $this->render('AppBundle:Admin/Ad:error.html.twig', [
+            return $this->render('Admin/Ad/error.html.twig', [
                 'error' => 'You can only view Lay deputies',
             ]);
         }
@@ -139,7 +139,7 @@ class AdController extends AbstractController
 
             return $this->redirect($redirectUrl);
         } catch (\Throwable $e) {
-            return $this->render('AppBundle:Admin/Ad:error.html.twig', [
+            return $this->render('Admin/Ad/error.html.twig', [
                 'error' => $e->getMessage(),
             ]);
         }

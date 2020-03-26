@@ -1,4 +1,4 @@
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "ndr-assets" %}
 {% trans_default_domain translationDomain %}
@@ -49,9 +49,9 @@
 {# display assets in groups #}
 {% for groupId, assetsInGroup in ndr.assetsGroupedByTitle %}
     {% if (groupId | lower) == 'property' %}
-        {% include 'AppBundle:Ndr/Asset/Property:_list_item.html.twig' %}
+        {% include 'Ndr/Asset/Property/_list_item.html.twig' %}
     {% else %}
-        {% include 'AppBundle:Ndr/Asset/Other:_list_item.html.twig'%}
+        {% include 'Ndr/Asset/Other/_list_item.html.twig'%}
     {% endif %}
 {% endfor %}
 

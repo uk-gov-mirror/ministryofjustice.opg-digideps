@@ -21,7 +21,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/", name="admin_organisation_homepage")
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Admin/Organisation:index.html.twig")
+     * @Template("Admin/Organisation/index.html.twig")
      */
     public function indexAction()
     {
@@ -35,7 +35,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/{id}", name="admin_organisation_view", requirements={"id":"\d+"})
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Admin/Organisation:view.html.twig")
+     * @Template("Admin/Organisation/view.html.twig")
      */
     public function viewAction($id)
     {
@@ -53,7 +53,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/add", name="admin_organisation_add")
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Admin/Organisation:form.html.twig")
+     * @Template("Admin/Organisation/form.html.twig")
      */
     public function addAction(Request $request)
     {
@@ -90,7 +90,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/{id}/edit", name="admin_organisation_edit", requirements={"id":"\d+"})
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Admin/Organisation:form.html.twig")
+     * @Template("Admin/Organisation/form.html.twig")
      */
     public function editAction(Request $request, $id = null)
     {
@@ -127,7 +127,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/{id}/delete", name="admin_organisation_delete", requirements={"id":"\d+"})
      * @Security("has_role('ROLE_SUPER_ADMIN')")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -167,7 +167,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/{id}/add-user", name="admin_organisation_member_add", requirements={"id":"\d+"})
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Admin/Organisation:add-user.html.twig")
+     * @Template("Admin/Organisation/add-user.html.twig")
      */
     public function addUserAction(Request $request, $id) {
         $form = $this->createForm(FormDir\Admin\OrganisationAddUserType::class);
@@ -220,7 +220,7 @@ class OrganisationController extends AbstractController
     /**
      * @Route("/{id}/delete-user/{userId}", name="admin_organisation_member_delete", requirements={"id":"\d+"})
      * @Security("has_role('ROLE_ADMIN')")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      */
     public function deleteUserAction(Request $request, $id, $userId) {
         $form = $this->createForm(FormDir\ConfirmDeleteType::class);

@@ -1,6 +1,6 @@
-{% extends env == 'admin' ? 'AppBundle:Layouts:admin_moj_template.html.twig' : 'AppBundle:Layouts:moj_template.html.twig' %}
+{% extends env == 'admin' ? 'Layouts/admin_moj_template.html.twig' : 'Layouts/moj_template.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set adLoggedAsDeputy = app.session.get('_adId') %}
 {% set adName = app.session.get('_adFirstname') ~ ' ' ~ app.session.get('_adLastname') %}
@@ -153,7 +153,7 @@
 {% block bodyEnd %}
 
     {% block popups %}
-        {% include 'AppBundle:Components/Resources:_popups.html.twig' %}
+        {% include 'Components/Resources/_popups.html.twig' %}
     {% endblock %}
 
 {% endblock %}

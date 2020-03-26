@@ -46,7 +46,7 @@ class UserController extends AbstractController
 
         // token expired
         if (!$user->isTokenSentInTheLastHours(EntityDir\User::TOKEN_EXPIRE_HOURS)) {
-            $template = $isActivatePage ? 'AppBundle:User:activateTokenExpired.html.twig' : 'AppBundle:User:passwordResetTokenExpired.html.twig';
+            $template = $isActivatePage ? 'User/activateTokenExpired.html.twig' : 'User/passwordResetTokenExpired.html.twig';
 
             return $this->render($template, [
                 'token'            => $token,
@@ -68,11 +68,11 @@ class UserController extends AbstractController
             $form = $this->createForm(FormDir\SetPasswordType::class, $user, [ 'passwordMismatchMessage' => $passwordMismatchMessage, 'showTermsAndConditions'  => $user->isDeputy()
                                        ]
                                      );
-            $template = 'AppBundle:User:activate.html.twig';
+            $template = 'User/activate.html.twig';
         } else { // 'password-reset'
             $passwordMismatchMessage = $translator->trans('form.password.validation.passwordMismatch', [], 'password-reset');
             $form = $this->createForm(FormDir\ResetPasswordType::class, $user, ['passwordMismatchMessage' => $passwordMismatchMessage]);
-            $template = 'AppBundle:User:passwordReset.html.twig';
+            $template = 'User/passwordReset.html.twig';
         }
 
         $form->handleRequest($request);
@@ -127,7 +127,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/activate/password/send/{token}", name="activation_link_send")
-     * @Template("AppBundle:User:activateLinkSend.html.twig")
+     * @Template("User/activateLinkSend.html.twig")
      */
     public function activateLinkSendAction(string $token): Response
     {
@@ -148,7 +148,7 @@ class UserController extends AbstractController
     /**
      * @return array<mixed>
      * @Route("/user/activate/password/sent/{token}", name="activation_link_sent")
-     * @Template("AppBundle:User:activateLinkSent.html.twig")
+     * @Template("User/activateLinkSent.html.twig")
      */
     public function activateLinkSentAction(string $token): array
     {
@@ -168,7 +168,7 @@ class UserController extends AbstractController
      *
      * @return array<mixed>|Response
      * @Route("/user/details", name="user_details")
-     * @Template("AppBundle:User:details.html.twig")
+     * @Template("User/details.html.twig")
      */
     public function detailsAction(Request $request)
     {
@@ -205,7 +205,7 @@ class UserController extends AbstractController
     /**
      * @return array<mixed>|Response
      * @Route("/password-managing/forgotten", name="password_forgotten")
-     * @Template("AppBundle:User:passwordForgotten.html.twig")
+     * @Template("User/passwordForgotten.html.twig")
      **/
     public function passwordForgottenAction(Request $request)
     {
@@ -250,7 +250,7 @@ class UserController extends AbstractController
     /**
      * @return array<mixed>
      * @Route("/password-managing/sent", name="password_sent")
-     * @Template("AppBundle:User:passwordSent.html.twig")
+     * @Template("User/passwordSent.html.twig")
      */
     public function passwordSentAction(): array
     {
@@ -260,7 +260,7 @@ class UserController extends AbstractController
     /**
      * @return array<mixed>|Response
      * @Route("/register", name="register")
-     * @Template("AppBundle:User:register.html.twig")
+     * @Template("User/register.html.twig")
      */
     public function registerAction(Request $request)
     {
@@ -289,7 +289,7 @@ class UserController extends AbstractController
                 $signIn = '<a href="' . $this->generateUrl('login') . '">' . $signInText . '</a>';
                 $bodyText = str_replace('{{ sign_in }}', $signIn, $bodyText);
 
-                return $this->render('AppBundle:User:registration-thankyou.html.twig', [
+                return $this->render('User/registration-thankyou.html.twig', [
                     'bodyText' => $bodyText,
                     'email'    => $email,
                 ]);
@@ -352,9 +352,9 @@ class UserController extends AbstractController
         }
 
         if ($user->getRoleName() == EntityDir\User::ROLE_PA_NAMED) {
-            $view = 'AppBundle:User:agreeTermsUsePa.html.twig';
+            $view = 'User/agreeTermsUsePa.html.twig';
         } elseif ($user->getRoleName() ==EntityDir\User::ROLE_PROF_NAMED) {
-            $view = 'AppBundle:User:agreeTermsUseProf.html.twig';
+            $view = 'User/agreeTermsUseProf.html.twig';
         } else {
             throw new \RuntimeException('terms page not implemented');
         }

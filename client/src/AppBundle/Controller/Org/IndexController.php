@@ -22,7 +22,7 @@ class IndexController extends AbstractController
 {
     /**
      * @Route("/", name="org_dashboard")
-     * @Template("AppBundle:Org/Index:dashboard.html.twig")
+     * @Template("Org/Index/dashboard.html.twig")
      */
     public function dashboardAction(Request $request)
     {
@@ -67,7 +67,7 @@ class IndexController extends AbstractController
      * so it's retrieved with the report with a single API call
      *
      * @Route("/client/{clientId}/edit", name="org_client_edit")
-     * @Template("AppBundle:Org/Index:clientEdit.html.twig")
+     * @Template("Org/Index/clientEdit.html.twig")
      */
     public function clientEditAction(Request $request, $clientId)
     {
@@ -108,7 +108,7 @@ class IndexController extends AbstractController
      * Client archive page
      *
      * @Route("/client/{clientId}/archive", name="org_client_archive")
-     * @Template("AppBundle:Org/Index:clientArchive.html.twig")
+     * @Template("Org/Index/clientArchive.html.twig")
      */
     public function clientArchiveAction(Request $request, $clientId)
     {

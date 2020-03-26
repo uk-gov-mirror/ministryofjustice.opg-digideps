@@ -29,6 +29,7 @@ RUN composer install --prefer-dist --no-interaction --no-scripts
 
 COPY app app
 COPY src src
+COPY translations translations
 RUN composer run-script post-install-cmd --no-interaction
 RUN composer dump-autoload --optimize
 

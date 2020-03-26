@@ -1,4 +1,4 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
 {% trans_default_domain "admin-documents" %}
 {% set transOptions = {} %}
@@ -213,7 +213,7 @@
             </tbody>
         </table>
         </form>
-        {% include 'AppBundle:Components:paginator.html.twig' with {
+        {% include 'Components/paginator.html.twig' with {
             currentOffset: filters.offset,
             recordsPerPage: filters.limit,
             totalRecords: counts[filters.status ?: 'total'],

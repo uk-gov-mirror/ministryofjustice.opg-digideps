@@ -1,4 +1,4 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
 {% set translationDomain = "report-documents" %}
 {% trans_default_domain translationDomain %}
@@ -19,7 +19,7 @@
 {% block pageContent %}
 
     <p class="text">{{ (page ~ '.para01') | trans }}</p>
-    {% include 'AppBundle:Report/Document:_list_submitted.html.twig'  with {
+    {% include 'Report/Document/_list_submitted.html.twig'  with {
     'documents': report.submittedDocuments,
     'translationDomain': translationDomain,
     'page' : page,

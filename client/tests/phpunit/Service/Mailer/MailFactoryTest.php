@@ -104,8 +104,8 @@ class MailFactoryTest extends TestCase
             'recipientRole'    => 'default'
         ];
 
-        $this->templating->render('AppBundle:Email:user-activate.html.twig', $expectedViewParams)->shouldBeCalled()->willReturn('<html>Rendered body</html>');
-        $this->templating->render('AppBundle:Email:user-activate.text.twig', $expectedViewParams)->shouldBeCalled()->willReturn('Rendered body');
+        $this->templating->render('Email/user-activate.html.twig', $expectedViewParams)->shouldBeCalled()->willReturn('<html>Rendered body</html>');
+        $this->templating->render('Email/user-activate.text.twig', $expectedViewParams)->shouldBeCalled()->willReturn('Rendered body');
 
         $email = ($this->generateSUT())->createActivationEmail($this->layDeputy);
 

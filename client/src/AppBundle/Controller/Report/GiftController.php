@@ -20,7 +20,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts", name="gifts")
-     * @Template("AppBundle:Report/Gift:start.html.twig")
+     * @Template("Report/Gift/start.html.twig")
      *
      * @param int $reportId
      *
@@ -41,7 +41,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts/exist", name="gifts_exist")
-     * @Template("AppBundle:Report/Gift:exist.html.twig")
+     * @Template("Report/Gift/exist.html.twig")
      */
     public function existAction(Request $request, $reportId)
     {
@@ -76,7 +76,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts/add", name="gifts_add")
-     * @Template("AppBundle:Report/Gift:add.html.twig")
+     * @Template("Report/Gift/add.html.twig")
      */
     public function addAction(Request $request, $reportId)
     {
@@ -118,7 +118,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts/edit/{giftId}", name="gifts_edit")
-     * @Template("AppBundle:Report/Gift:edit.html.twig")
+     * @Template("Report/Gift/edit.html.twig")
      */
     public function editAction(Request $request, $reportId, $giftId)
     {
@@ -168,7 +168,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts/summary", name="gifts_summary")
-     * @Template("AppBundle:Report/Gift:summary.html.twig")
+     * @Template("Report/Gift/summary.html.twig")
      *
      * @param int $reportId
      *
@@ -188,7 +188,7 @@ class GiftController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/gifts/{giftId}/delete", name="gifts_delete")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      *
      * @param int $id
      *

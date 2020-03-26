@@ -51,7 +51,7 @@ class BehatController extends AbstractController
 
     /**
      * @Route("/behat/emails", methods={"GET"})
-     * @Template("AppBundle:Behat:emails.html.twig")
+     * @Template("Behat/emails.html.twig")
      */
     public function emailsAction(Request $request)
     {

@@ -118,7 +118,7 @@ class ReportSubmissionService
      */
     public function getPdfBinaryContent(ReportInterface $report, $showSummary = false)
     {
-        $html = $this->templating->render('AppBundle:Report/Formatted:formatted_standalone.html.twig', [
+        $html = $this->templating->render('Report/Formatted/formatted_standalone.html.twig', [
             'report' => $report,
             'showSummary' => $showSummary
         ]);
@@ -143,7 +143,7 @@ class ReportSubmissionService
             $reviewChecklist = null;
         }
 
-        $html = $this->templating->render('AppBundle:Admin/Client/Report/Formatted:checklist_formatted_standalone.html.twig', [
+        $html = $this->templating->render('Admin/Client/Report/Formatted/checklist_formatted_standalone.html.twig', [
             'report' => $report,
             'lodgingChecklist' => $report->getChecklist(),
             'reviewChecklist' => $reviewChecklist

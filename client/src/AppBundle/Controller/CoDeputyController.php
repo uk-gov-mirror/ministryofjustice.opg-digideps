@@ -14,7 +14,7 @@ class CoDeputyController extends AbstractController
 {
     /**
      * @Route("/codeputy/verification", name="codep_verification")
-     * @Template("AppBundle:CoDeputy:verification.html.twig")
+     * @Template("CoDeputy/verification.html.twig")
      */
     public function verificationAction(Request $request)
     {
@@ -96,7 +96,7 @@ class CoDeputyController extends AbstractController
 
     /**
      * @Route("/codeputy/{clientId}/add", name="add_co_deputy")
-     * @Template("AppBundle:CoDeputy:add.html.twig")
+     * @Template("CoDeputy/add.html.twig")
      */
     public function addAction(Request $request)
     {
@@ -151,7 +151,7 @@ class CoDeputyController extends AbstractController
 
     /**
      * @Route("/codeputy/re-invite/{email}", name="codep_resend_activation")
-     * @Template("AppBundle:CoDeputy:resendActivation.html.twig")
+     * @Template("CoDeputy/resendActivation.html.twig")
      **/
     public function resendActivationAction(Request $request, $email)
     {

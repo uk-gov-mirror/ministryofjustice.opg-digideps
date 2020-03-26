@@ -201,7 +201,7 @@ class DocumentService
     public function createMissingDocumentsFlashMessage(array $missingDocuments)
     {
         return $this->twig->render(
-            'AppBundle:FlashMessages:missing-documents.html.twig',
+            'FlashMessages/missing-documents.html.twig',
             ['missingDocuments' => $missingDocuments]
         );
     }

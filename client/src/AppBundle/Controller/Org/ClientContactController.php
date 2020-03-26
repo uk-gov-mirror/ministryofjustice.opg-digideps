@@ -20,7 +20,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Route("add", name="clientcontact_add")
-     * @Template("AppBundle:Org/ClientProfile:addContact.html.twig")
+     * @Template("Org/ClientProfile/addContact.html.twig")
      */
     public function addAction(Request $request)
     {
@@ -58,7 +58,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Route("{id}/edit", name="clientcontact_edit")
-     * @Template("AppBundle:Org/ClientProfile:editContact.html.twig")
+     * @Template("Org/ClientProfile/editContact.html.twig")
      */
     public function editAction(Request $request, $id)
     {
@@ -88,7 +88,7 @@ class ClientContactController extends AbstractController
 
     /**
      * @Route("{id}/delete", name="clientcontact_delete")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      */
     public function deleteConfirmAction(Request $request, $id, $confirmed = false)
     {

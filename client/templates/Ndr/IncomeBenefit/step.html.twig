@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "ndr-income-benefits" %}
 {% trans_default_domain translationDomain %}
@@ -36,7 +36,7 @@
         <p class="text">
             {{ 'form.stateBenefits.hint' | trans(transOptions) }}
         </p>
-        {% include 'AppBundle:Ndr/IncomeBenefit:_checkboxes_list.html.twig' with {
+        {% include 'Ndr/IncomeBenefit/_checkboxes_list.html.twig' with {
         'categoryKey': 'form.stateBenefits',
         'elements': form.stateBenefits,
         } %}
@@ -129,7 +129,7 @@
         <p class="text">
             {{ 'form.oneOff.hint' | trans(transOptions) }}
         </p>
-        {% include 'AppBundle:Ndr/IncomeBenefit:_checkboxes_list.html.twig' with {
+        {% include 'Ndr/IncomeBenefit/_checkboxes_list.html.twig' with {
         'categoryKey': 'form.oneOff',
         'elements': form.oneOff,
         } %}

@@ -18,7 +18,7 @@ class OtherInfoController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/any-other-info", name="ndr_other_info")
-     * @Template("AppBundle:Ndr/OtherInfo:start.html.twig")
+     * @Template("Ndr/OtherInfo/start.html.twig")
      */
     public function startAction(Request $request, $ndrId)
     {
@@ -34,7 +34,7 @@ class OtherInfoController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/any-other-info/step/{step}", name="ndr_other_info_step")
-     * @Template("AppBundle:Ndr/OtherInfo:step.html.twig")
+     * @Template("Ndr/OtherInfo/step.html.twig")
      */
     public function stepAction(Request $request, $ndrId, $step)
     {
@@ -79,7 +79,7 @@ class OtherInfoController extends AbstractController
 
     /**
      * @Route("/ndr/{ndrId}/any-other-info/summary", name="ndr_other_info_summary")
-     * @Template("AppBundle:Ndr/OtherInfo:summary.html.twig")
+     * @Template("Ndr/OtherInfo/summary.html.twig")
      */
     public function summaryAction(Request $request, $ndrId)
     {

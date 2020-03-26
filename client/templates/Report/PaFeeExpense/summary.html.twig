@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-pa-fee-expense" %}
 {% trans_default_domain translationDomain %}
@@ -35,23 +35,23 @@
         </div>
     </div>
 
-    {% include 'AppBundle:Report/PaFeeExpense:_yn_questions.html.twig' with {
+    {% include 'Report/PaFeeExpense/_yn_questions.html.twig' with {
     'report': report,
     'transDomain': translationDomain
     } %}
 
-    {% include 'AppBundle:Report/PaFeeExpense:_fee_list.html.twig' with {
+    {% include 'Report/PaFeeExpense/_fee_list.html.twig' with {
     'report': report,
     'transDomain': translationDomain
     } %}
 
-    {% include 'AppBundle:Report/PaFeeExpense:_other_list.html.twig' with {
+    {% include 'Report/PaFeeExpense/_other_list.html.twig' with {
     'report': report,
     'transDomain': translationDomain
     } %}
 
     {# Pagination #}
-    {% include 'AppBundle:Report:_nextprevious.html.twig' with {
+    {% include 'Report/_nextprevious.html.twig' with {
         'report': report,
         'sectionId': 'paFeeExpense',
     } %}

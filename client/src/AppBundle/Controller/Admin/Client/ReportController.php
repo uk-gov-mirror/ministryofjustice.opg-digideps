@@ -89,7 +89,7 @@ class ReportController extends AbstractController
      * @param Request $request
      * @param string $id
      *
-     * @Template("AppBundle:Admin/Client/Report:checklist.html.twig")
+     * @Template("Admin/Client/Report/checklist.html.twig")
      *
      * @return array|RedirectResponse|Response
      */
@@ -205,7 +205,7 @@ class ReportController extends AbstractController
      * @param int $id
      *
      * @return array
-     * @Template("AppBundle:Admin/Client/Report:checklistSubmitted.html.twig")
+     * @Template("Admin/Client/Report/checklistSubmitted.html.twig")
      *
      */
     public function checklistSubmittedAction(int $id)
@@ -256,7 +256,7 @@ class ReportController extends AbstractController
      * @param Request $request
      * @param string $id
      *
-     * @Template("AppBundle:Admin/Client/Report:manage.html.twig")
+     * @Template("Admin/Client/Report/manage.html.twig")
      *
      * @return array|Response|RedirectResponse
      * @throws \Exception
@@ -361,7 +361,7 @@ class ReportController extends AbstractController
      *
      * @param $id
      * @return array|Response|RedirectResponse
-     * @Template("AppBundle:Admin/Client/Report:manageConfirm.html.twig")
+     * @Template("Admin/Client/Report/manageConfirm.html.twig")
      *
      * @throws \Exception
      */
@@ -459,7 +459,7 @@ class ReportController extends AbstractController
     private function upsertChecklistInformation(Report $report): void
     {
         $content = $this
-            ->render('AppBundle:Admin/Client/Report/Formatted:unsubmit_information.html.twig', ['report' => $report])
+            ->render('Admin/Client/Report/Formatted/unsubmit_information.html.twig', ['report' => $report])
             ->getContent();
 
         $checklist = $report->getChecklist();

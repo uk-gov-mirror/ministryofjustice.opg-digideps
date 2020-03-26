@@ -122,7 +122,7 @@
     <div class="govuk-width-container opg-main-wrapper {% if env == 'admin' %}opg-width-container--wider{% endif %}">
         {% if env == 'front' %}
             {% block detailsBanner %}
-                {% include 'AppBundle:Org/ClientProfile:_detailsBanner.html.twig' with {
+                {% include 'Org/ClientProfile/_detailsBanner.html.twig' with {
                     'report': report is defined ? report : null
                 } %}
             {% endblock %}

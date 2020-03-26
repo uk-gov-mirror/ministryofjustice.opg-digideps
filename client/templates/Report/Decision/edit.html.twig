@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-decisions" %}
 {% trans_default_domain translationDomain %}
@@ -21,7 +21,7 @@
 
 {% block pageContent %}
 
-    {% include 'AppBundle:Report/Decision:_form.html.twig' with {
+    {% include 'Report/Decision/_form.html.twig' with {
     'translationDomain': translationDomain,
     'form': form
     } %}

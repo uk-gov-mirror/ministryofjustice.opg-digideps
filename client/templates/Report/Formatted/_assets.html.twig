@@ -18,9 +18,9 @@
                 {% for groupId, assetsInGroup in report.getAssetsGroupedByTitle %}
                     <li data-group="{{ groupId }}">
                         {% if (groupId | lower) == 'property' %}
-                            {% include 'AppBundle:Report/Formatted/Asset:_property.html.twig' %}
+                            {% include 'Report/Formatted/Asset/_property.html.twig' %}
                         {% else %}
-                             {% include 'AppBundle:Report/Formatted/Asset:_other.html.twig' %}
+                             {% include 'Report/Formatted/Asset/_other.html.twig' %}
                         {% endif%}
                     </li>
                 {% endfor %}

@@ -125,8 +125,8 @@ class MailFactory
             ->setToEmail($user->getEmail())
             ->setToName($user->getFullName())
             ->setSubject($this->translate('activation.subject'))
-            ->setBodyHtml($this->templating->render('AppBundle:Email:user-activate.html.twig', $viewParams))
-            ->setBodyText($this->templating->render('AppBundle:Email:user-activate.text.twig', $viewParams));
+            ->setBodyHtml($this->templating->render('Email/user-activate.html.twig', $viewParams))
+            ->setBodyText($this->templating->render('Email/user-activate.text.twig', $viewParams));
 
         return $email;
     }
@@ -185,8 +185,8 @@ class MailFactory
             ->setToEmail($user->getEmail())
             ->setToName($user->getFullName())
             ->setSubject($this->translate('resetPassword.subject'))
-            ->setBodyHtml($this->templating->render('AppBundle:Email:password-forgotten.html.twig', $viewParams))
-            ->setBodyText($this->templating->render('AppBundle:Email:password-forgotten.text.twig', $viewParams));
+            ->setBodyHtml($this->templating->render('Email/password-forgotten.html.twig', $viewParams))
+            ->setBodyText($this->templating->render('Email/password-forgotten.text.twig', $viewParams));
 
         return $email;
     }
@@ -241,7 +241,7 @@ class MailFactory
             ->setToEmail($user->getEmail())
             ->setToName($user->getFirstname())
             ->setSubject($this->translate('changePassword.subject'))
-            ->setBodyHtml($this->templating->render('AppBundle:Email:change-password.html.twig', $viewParams));
+            ->setBodyHtml($this->templating->render('Email/change-password.html.twig', $viewParams));
 
         return $email;
     }
@@ -486,8 +486,8 @@ class MailFactory
             ->setToEmail($invitedUser->getEmail())
             ->setToName($invitedUser->getFullName())
             ->setSubject($this->translate('codeputyInvitation.subject'))
-            ->setBodyHtml($this->templating->render('AppBundle:Email:coDeputy-invitation.html.twig', $viewParams))
-            ->setBodyText($this->templating->render('AppBundle:Email:coDeputy-invitation.text.twig', $viewParams));
+            ->setBodyHtml($this->templating->render('Email/coDeputy-invitation.html.twig', $viewParams))
+            ->setBodyText($this->templating->render('Email/coDeputy-invitation.text.twig', $viewParams));
 
         return $email;
     }

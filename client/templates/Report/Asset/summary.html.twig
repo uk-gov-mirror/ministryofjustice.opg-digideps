@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-assets" %}
 {% trans_default_domain translationDomain %}
@@ -34,10 +34,10 @@
     </div>
 
     {# Items list #}
-    {% include 'AppBundle:Report/Asset:_list.html.twig' %}
+    {% include 'Report/Asset/_list.html.twig' %}
 
     {# Pagination #}
-    {% include 'AppBundle:Report:_nextprevious.html.twig' with {
+    {% include 'Report/_nextprevious.html.twig' with {
         'report': report,
         'sectionId': 'assets',
     } %}

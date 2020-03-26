@@ -33,7 +33,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/documents", name="documents")
-     * @Template("AppBundle:Report/Document:start.html.twig")
+     * @Template("Report/Document/start.html.twig")
      */
     public function startAction(Request $request, $reportId)
     {
@@ -57,7 +57,7 @@ class DocumentController extends AbstractController
     /**
      * @Route("/report/{reportId}/documents/step", name="documents_stepzero")
      * @Route("/report/{reportId}/documents/step/1", name="documents_step")
-     * @Template("AppBundle:Report/Document:step1.html.twig")
+     * @Template("Report/Document/step1.html.twig")
      */
     public function step1Action(Request $request, $reportId)
     {
@@ -113,7 +113,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/documents/step/2", name="report_documents", defaults={"what"="new"})
-     * @Template("AppBundle:Report/Document:step2.html.twig")
+     * @Template("Report/Document/step2.html.twig")
      */
     public function step2Action(Request $request, $reportId)
     {
@@ -219,7 +219,7 @@ class DocumentController extends AbstractController
 
     /**
      * @Route("/report/{reportId}/documents/summary", name="report_documents_summary")
-     * @Template("AppBundle:Report/Document:summary.html.twig")
+     * @Template("Report/Document/summary.html.twig")
      */
     public function summaryAction(Request $request, $reportId)
     {
@@ -242,7 +242,7 @@ class DocumentController extends AbstractController
      * Confirm delete document form
      *
      * @Route("/documents/{documentId}/delete", name="delete_document")
-     * @Template("AppBundle:Common:confirmDelete.html.twig")
+     * @Template("Common/confirmDelete.html.twig")
      */
     public function deleteConfirmAction(Request $request, $documentId)
     {
@@ -333,7 +333,7 @@ class DocumentController extends AbstractController
      * Confirm additional documents form
      *
      * @Route("/report/{reportId}/documents/submit-more", name="report_documents_submit_more")
-     * @Template("AppBundle:Report/Document:submitMoreDocumentsConfirm.html.twig")
+     * @Template("Report/Document/submitMoreDocumentsConfirm.html.twig")
      */
     public function submitMoreConfirmAction(Request $request, $reportId)
     {
@@ -356,7 +356,7 @@ class DocumentController extends AbstractController
      * Confirmed send additional documents.
      *
      * @Route("/report/{reportId}/documents/confirm-submit-more", name="report_documents_submit_more_confirmed")
-     * @Template("AppBundle:Report/Document:submitMoreDocumentsConfirmed.html.twig")
+     * @Template("Report/Document/submitMoreDocumentsConfirmed.html.twig")
      */
     public function submitMoreConfirmedAction(Request $request, $reportId)
     {

@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig'%}
+{% extends 'Layouts/application.html.twig'%}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "ndr-actions" %}
 {% trans_default_domain translationDomain %}
@@ -38,7 +38,7 @@
     <a href="{{ path('ndr_actions_step', { 'ndrId': ndr.id, 'step': 1 }) }}" class="button button-start behat-link-start">{{ 'startPage.startButton' | trans }}</a>
 
     {# Pagination #}
-    {% include 'AppBundle:Report:_nextprevious.html.twig' with {
+    {% include 'Report/_nextprevious.html.twig' with {
         'report': ndr,
         'sectionId': 'actions',
     } %}

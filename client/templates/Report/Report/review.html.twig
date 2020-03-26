@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% import 'AppBundle:Macros:macros.html.twig' as macros %}
+{% import 'Macros/macros.html.twig' as macros %}
 
 {% set translationDomain = "report-display" %}
 {% trans_default_domain translationDomain %}
@@ -69,7 +69,7 @@
     </div>
 
     <div class="push--bottom">
-        {% include 'AppBundle:Report/Formatted:formatted_body.html.twig' %}
+        {% include 'Report/Formatted/formatted_body.html.twig' %}
     </div>
 
     {% if report.submitted == false %}

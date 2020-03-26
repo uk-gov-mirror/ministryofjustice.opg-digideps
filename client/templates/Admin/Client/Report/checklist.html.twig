@@ -1,6 +1,6 @@
-{% extends 'AppBundle:Layouts:application.html.twig' %}
+{% extends 'Layouts/application.html.twig' %}
 
-{% from 'AppBundle:Macros:macros.html.twig' import details %}
+{% from 'Macros/macros.html.twig' import details %}
 
 {% set translationDomain = "admin-checklist" %}
 {% trans_default_domain translationDomain %}
@@ -60,63 +60,63 @@
         <div class="govuk-grid-column-two-thirds">
             {# Attached documents #}
             {% if report.deputyDocuments is defined and (report.deputyDocuments is not empty) %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_document-summary.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_document-summary.html.twig' %}
             {% endif %}
 
             {{ form_start(form, {attr: {novalidate: 'novalidate', id: 'create-report-checklist-form' }}) }}
 
             {# Deputy and client information #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_deputy-and-client-info.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_deputy-and-client-info.html.twig' %}
 
             {# Decisions made over the reporting period #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_decisions-made.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_decisions-made.html.twig' %}
 
             {# People consulted #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_people-consulted.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_people-consulted.html.twig' %}
 
             {# Contact with client, care arrangements and care plan #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_contact-with-client.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_contact-with-client.html.twig' %}
 
             {# Health & Lifestyle #}
             {% if form.satisfiedWithHealthAndLifestyle is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_health-and-lifestyle.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_health-and-lifestyle.html.twig' %}
             {% endif %}
 
             {# Assets and debts #}
             {% if form.assetsDeclaredAndManaged is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_assets-and-debts.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_assets-and-debts.html.twig' %}
             {% endif %}
 
             {# Money transfers, Money in and money out #}
             {% if form.openClosingBalancesMatch is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_money-in-and-out.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_money-in-and-out.html.twig' %}
             {% endif %}
 
             {# PA fees and expenses #}
             {% if form.satisfiedWithPaExpenses is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_pa-fee-expenses.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_pa-fee-expenses.html.twig' %}
             {% endif %}
 
             {# Bonds #}
             {% if form.bondAdequate is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_bonds.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_bonds.html.twig' %}
             {% endif %}
 
             {# Deputy costs #}
             {% if form.paymentsMatchCostCertificate is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_prof-deputy-costs.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_prof-deputy-costs.html.twig' %}
             {% endif %}
 
             {# Deputy costs estimates #}
             {% if form.nextBillingEstimatesSatisfactory is defined %}
-                {% include 'AppBundle:Admin/Client/Report/partials:_prof-deputy-costs-estimate.html.twig' %}
+                {% include 'Admin/Client/Report/partials/_prof-deputy-costs-estimate.html.twig' %}
             {% endif %}
 
             {# Next reporting period #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_next-reporting-period.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_next-reporting-period.html.twig' %}
 
             {# Declaration #}
-            {% include 'AppBundle:Admin/Client/Report/partials:_declaration.html.twig' %}
+            {% include 'Admin/Client/Report/partials/_declaration.html.twig' %}
 
             <a name="anchor-lodging-summary"></a>
             {{ form_input(form.lodgingSummary, (page ~ '.form.lodgingSummary'), {
@@ -139,7 +139,7 @@
             }) }}
 
             {% set contents %}
-                {{ include('AppBundle:Admin/Client/Report/partials:_further-information-table.html.twig', {
+                {{ include('Admin/Client/Report/partials/_further-information-table.html.twig', {
                     information: checklist.checklistInformation
                 }) }}
             {% endset %}
@@ -167,22 +167,22 @@
         </div>
         {% if checklist.submittedOn and checklist.finalDecision == 'for-review' %}
             <div class="govuk-grid-column-one-third opg-sticky-menu">
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_statuses.html.twig' with {checklistDomain: 'lodging'} %}
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_fullReview.html.twig' %}
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_backToTopLinks.html.twig' with {checklistDomain: 'lodging'} %}
+                {% include 'Admin/Client/Report/sidebar/_statuses.html.twig' with {checklistDomain: 'lodging'} %}
+                {% include 'Admin/Client/Report/sidebar/_fullReview.html.twig' %}
+                {% include 'Admin/Client/Report/sidebar/_backToTopLinks.html.twig' with {checklistDomain: 'lodging'} %}
             </div>
         {% else %}
             <div class="govuk-grid-column-one-third opg-sticky-menu">
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_statuses.html.twig' with {checklistDomain: 'lodging'} %}
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_lodging.html.twig' %}
-                {% include 'AppBundle:Admin/Client/Report/sidebar:_backToTopLinks.html.twig' with {checklistDomain: 'lodging'} %}
+                {% include 'Admin/Client/Report/sidebar/_statuses.html.twig' with {checklistDomain: 'lodging'} %}
+                {% include 'Admin/Client/Report/sidebar/_lodging.html.twig' %}
+                {% include 'Admin/Client/Report/sidebar/_backToTopLinks.html.twig' with {checklistDomain: 'lodging'} %}
             </div>
         {% endif %}
 
     </div>
 
     {% if checklist.submittedOn and checklist.finalDecision == 'for-review' %}
-        {% include 'AppBundle:Admin/Client/Report:fullReviewChecklist.html.twig' with {form: reviewForm, checklist: reviewChecklist} %}
+        {% include 'Admin/Client/Report/fullReviewChecklist.html.twig' with {form: reviewForm, checklist: reviewChecklist} %}
     {% endif %}
 
 {% endblock %}
