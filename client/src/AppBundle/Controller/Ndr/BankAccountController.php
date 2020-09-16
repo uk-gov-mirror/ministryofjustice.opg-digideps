@@ -56,7 +56,7 @@ class BankAccountController extends AbstractController
 
         // create (add mode) or load account (edit mode)
         if ($accountId) {
-            $account = $this->getRestClient()->get('ndr/account/' . $accountId, 'Ndr\\BankAccount');
+            $account = $this->restClient->get('ndr/account/' . $accountId, 'Ndr\\BankAccount');
         } else {
             $account = new EntityDir\Ndr\BankAccount();
             $account->setNdr($ndr);
@@ -92,7 +92,7 @@ class BankAccountController extends AbstractController
             // last step: save
             if ($step == $totalSteps) {
                 if ($accountId) {
-                    $this->getRestClient()->put('/ndr/account/' . $accountId, $account, ['bank-account']);
+                    $this->restClient->put('/ndr/account/' . $accountId, $account, ['bank-account']);
                     $request->getSession()->getFlashBag()->add(
                         'notice',
                         'Bank account edited'
@@ -100,7 +100,7 @@ class BankAccountController extends AbstractController
 
                     return $this->redirectToRoute('ndr_bank_accounts_summary', ['ndrId' => $ndrId]);
                 } else {
-                    $this->getRestClient()->post('ndr/' . $ndrId . '/account', $account, ['bank-account']);
+                    $this->restClient->post('ndr/' . $ndrId . '/account', $account, ['bank-account']);
 
                     return $this->redirectToRoute('ndr_bank_accounts_add_another', ['ndrId' => $ndrId]);
                 }
@@ -193,13 +193,13 @@ class BankAccountController extends AbstractController
             );
 
             if ($ndr->hasBankAccountWithId($accountId)) {
-                $this->getRestClient()->delete("/ndr/account/{$accountId}");
+                $this->restClient->delete("/ndr/account/{$accountId}");
             }
 
             return $this->redirect($this->generateUrl('ndr_bank_accounts_summary', ['ndrId' => $ndrId]));
         }
 
-        $account = $this->getRestClient()->get('ndr/account/' . $accountId, 'Ndr\\BankAccount');
+        $account = $this->restClient->get('ndr/account/' . $accountId, 'Ndr\\BankAccount');
 
         return [
             'translationDomain' => 'ndr-bank-accounts',

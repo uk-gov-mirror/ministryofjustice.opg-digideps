@@ -59,7 +59,7 @@ class BankAccountController extends AbstractController
 
         // create (add mode) or load account (edit mode)
         if ($accountId) {
-            $account = $this->getRestClient()->get('report/account/' . $accountId, 'Report\\BankAccount');
+            $account = $this->restClient->get('report/account/' . $accountId, 'Report\\BankAccount');
         } else {
             $account = new EntityDir\Report\BankAccount();
             $account->setReport($report);
@@ -111,7 +111,7 @@ class BankAccountController extends AbstractController
             // last step: save
             if ($isLastStep) {
                 if ($accountId) {
-                    $this->getRestClient()->put('/account/' . $accountId, $account, self::$jmsGroups);
+                    $this->restClient->put('/account/' . $accountId, $account, self::$jmsGroups);
                     $request->getSession()->getFlashBag()->add(
                         'notice',
                         'Bank account edited'
@@ -119,7 +119,7 @@ class BankAccountController extends AbstractController
 
                     return $this->redirect($this->generateUrl('bank_accounts_summary', ['reportId' => $reportId]));
                 } else {
-                    $this->getRestClient()->post('report/' . $reportId . '/account', $account, self::$jmsGroups);
+                    $this->restClient->post('report/' . $reportId . '/account', $account, self::$jmsGroups);
 
                     return $this->redirectToRoute('bank_accounts_add_another', ['reportId' => $reportId]);
                 }
@@ -202,7 +202,7 @@ class BankAccountController extends AbstractController
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
         $summaryPageUrl = $this->generateUrl('bank_accounts_summary', ['reportId' => $reportId]);
 
-        $dependentRecords = $this->getRestClient()->get("/account/{$accountId}/dependent-records", 'array');
+        $dependentRecords = $this->restClient->get("/account/{$accountId}/dependent-records", 'array');
         $bankAccount = $report->getBankAccountById($accountId);
 
         // if money transfer are added, always go to summary page with the error displayed
@@ -219,7 +219,7 @@ class BankAccountController extends AbstractController
         // delete the bank acount if the confirm button is pushed, or there are no payments. Then go back to summary page
         if ($form->isSubmitted() && $form->isValid()) {
             if ($report->getBankAccountById($accountId)) {
-                $this->getRestClient()->delete("/account/{$accountId}");
+                $this->restClient->delete("/account/{$accountId}");
             }
 
             $request->getSession()->getFlashBag()->add(
@@ -258,7 +258,9 @@ class BankAccountController extends AbstractController
         if ($dependentRecords['transactionsCount'] > 0) {
             $transactionTypes = [];
             foreach ($dependentRecords['transactions'] as $type => $count) {
-                if ($count > 0) $transactionTypes[] = $translator->trans($type, [], 'common');
+                if ($count > 0) {
+                    $transactionTypes[] = $translator->trans($type, [], 'common');
+                }
             }
 
             $templateData['warning'] = $translator->trans(

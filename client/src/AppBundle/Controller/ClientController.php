@@ -65,7 +65,7 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientUpdated = $form->getData();
             $clientUpdated->setId($client->getId());
-            $this->getRestClient()->put('client/upsert', $clientUpdated, ['edit']);
+            $this->restClient->put('client/upsert', $clientUpdated, ['edit']);
             $this->addFlash('notice', htmlentities($client->getFirstname()) . "'s data edited");
 
             $user = $this->getUserWithData(['user-clients', 'client']);
@@ -108,7 +108,7 @@ class ClientController extends AbstractController
         $client = $this->getFirstClient();
         if (!empty($client)) {
             // update existing client
-            $client = $this->getRestClient()->get('client/' . $client->getId(), 'Client', ['client', 'report-id', 'current-report']);
+            $client = $this->restClient->get('client/' . $client->getId(), 'Client', ['client', 'report-id', 'current-report']);
             $method = 'put';
             $client_validated = true;
         } else {
@@ -124,10 +124,10 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 // validate against casRec
-                $this->getRestClient()->apiCall('post', 'casrec/verify', $client, 'array', []);
+                $this->restClient->apiCall('post', 'casrec/verify', $client, 'array', []);
 
                 // $method is set above to either post or put
-                $response =  $this->getRestClient()->$method('client/upsert', $form->getData());
+                $response =  $this->restClient->$method('client/upsert', $form->getData());
 
                 /** @var User $currentUser */
                 $currentUser = $this->getUser();

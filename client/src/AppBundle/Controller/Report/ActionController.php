@@ -54,9 +54,12 @@ class ActionController extends AbstractController
             ->setCurrentStep($step)->setTotalSteps($totalSteps)
             ->setRouteBaseParams(['reportId' => $reportId]);
 
-        $form = $this->createForm(FormDir\Report\ActionType::class, $action, [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $report->getClient()->getFirstname()
+        $form = $this->createForm(
+            FormDir\Report\ActionType::class,
+            $action,
+            [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $report->getClient()->getFirstname()
                                    ]
-                                 );
+        );
         $form->handleRequest($request);
 
         if ($form->get('save')->isClicked() && $form->isSubmitted() && $form->isValid()) {
@@ -64,7 +67,7 @@ class ActionController extends AbstractController
             /* @var $data EntityDir\Report\Action */
             $data->setReport($report);
 
-            $this->getRestClient()->put('report/' . $reportId . '/action', $data);
+            $this->restClient->put('report/' . $reportId . '/action', $data);
 
             if ($fromPage == 'summary') {
                 $request->getSession()->getFlashBag()->add(

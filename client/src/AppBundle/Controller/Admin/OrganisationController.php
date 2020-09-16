@@ -25,7 +25,7 @@ class OrganisationController extends AbstractController
      */
     public function indexAction()
     {
-        $organisations = $this->getRestClient()->get('v2/organisation/list', 'Organisation[]');
+        $organisations = $this->restClient->get('v2/organisation/list', 'Organisation[]');
 
         return [
             'organisations' => $organisations
@@ -40,7 +40,7 @@ class OrganisationController extends AbstractController
     public function viewAction($id)
     {
         try {
-            $organisation = $this->getRestClient()->get('v2/organisation/' . $id, 'Organisation');
+            $organisation = $this->restClient->get('v2/organisation/' . $id, 'Organisation');
         } catch (RestClientException $e) {
             throw $this->createNotFoundException('Organisation not found');
         }
@@ -70,7 +70,7 @@ class OrganisationController extends AbstractController
             $organisation = $form->getData();
 
             try {
-                $this->getRestClient()->post('v2/organisation', $organisation);
+                $this->restClient->post('v2/organisation', $organisation);
                 $request->getSession()->getFlashBag()->add('notice', 'The organisation has been created');
 
                 return $this->redirectToRoute('admin_organisation_homepage');
@@ -94,7 +94,7 @@ class OrganisationController extends AbstractController
      */
     public function editAction(Request $request, $id = null)
     {
-        $organisation = $this->getRestClient()->get('v2/organisation/' . $id, 'Organisation');
+        $organisation = $this->restClient->get('v2/organisation/' . $id, 'Organisation');
 
         $form = $this->createForm(
             FormDir\Admin\OrganisationEditType::class,
@@ -107,7 +107,7 @@ class OrganisationController extends AbstractController
             $organisation = $form->getData();
 
             try {
-                $this->getRestClient()->put('v2/organisation/' . $organisation->getId(), $organisation);
+                $this->restClient->put('v2/organisation/' . $organisation->getId(), $organisation);
                 $request->getSession()->getFlashBag()->add('notice', 'The organisation has been updated');
 
                 return $this->redirectToRoute('admin_organisation_homepage');
@@ -134,11 +134,11 @@ class OrganisationController extends AbstractController
         $form = $this->createForm(FormDir\ConfirmDeleteType::class);
         $form->handleRequest($request);
 
-        $organisation = $this->getRestClient()->get('v2/organisation/' . $id, 'Organisation');
+        $organisation = $this->restClient->get('v2/organisation/' . $id, 'Organisation');
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $this->getRestClient()->delete('v2/organisation/' . $organisation->getId());
+                $this->restClient->delete('v2/organisation/' . $organisation->getId());
                 $request->getSession()->getFlashBag()->add('notice', 'The organisation has been removed');
             } catch (\Throwable $e) {
                 $this->get('logger')->error($e->getMessage());
@@ -169,17 +169,18 @@ class OrganisationController extends AbstractController
      * @Security("has_role('ROLE_ADMIN')")
      * @Template("AppBundle:Admin/Organisation:add-user.html.twig")
      */
-    public function addUserAction(Request $request, $id) {
+    public function addUserAction(Request $request, $id)
+    {
         $form = $this->createForm(FormDir\Admin\OrganisationAddUserType::class);
         $form->handleRequest($request);
 
-        $organisation = $this->getRestClient()->get('v2/organisation/' . $id, 'Organisation');
+        $organisation = $this->restClient->get('v2/organisation/' . $id, 'Organisation');
 
         if ($form->get('email')->getData()) {
             try {
                 $errors = [];
                 $email = $form->get('email')->getData();
-                $user = $this->getRestClient()->get('user/get-one-by/email/' . $email, 'User');
+                $user = $this->restClient->get('user/get-one-by/email/' . $email, 'User');
 
                 if (!$user->isDeputyOrg()) {
                     $errors[] = 'form.email.notOrgUserError';
@@ -194,8 +195,7 @@ class OrganisationController extends AbstractController
         }
 
         if (!empty($errors)) {
-            foreach ($errors as $error)
-            {
+            foreach ($errors as $error) {
                 $errorMessage = $this->get('translator')->trans($error, [], 'admin-organisation-users');
                 $form->get('email')->addError(new FormError($errorMessage));
             }
@@ -203,7 +203,7 @@ class OrganisationController extends AbstractController
         }
 
         if ($form->get('confirm')->isClicked()) {
-            $this->getRestClient()->put('v2/organisation/' . $organisation->getId() . '/user/' . $user->getId(), '');
+            $this->restClient->put('v2/organisation/' . $organisation->getId() . '/user/' . $user->getId(), '');
             $request->getSession()->getFlashBag()->add('notice', $user->getFullName() . ' has been added to ' . $organisation->getName());
 
             return$this->redirectToRoute('admin_organisation_view', ['id' => $organisation->getId()]);
@@ -222,16 +222,17 @@ class OrganisationController extends AbstractController
      * @Security("has_role('ROLE_ADMIN')")
      * @Template("AppBundle:Common:confirmDelete.html.twig")
      */
-    public function deleteUserAction(Request $request, $id, $userId) {
+    public function deleteUserAction(Request $request, $id, $userId)
+    {
         $form = $this->createForm(FormDir\ConfirmDeleteType::class);
         $form->handleRequest($request);
 
-        $organisation = $this->getRestClient()->get('v2/organisation/' . $id, 'Organisation');
-        $user = $this->getRestClient()->get('user/' . $userId, 'User');
+        $organisation = $this->restClient->get('v2/organisation/' . $id, 'Organisation');
+        $user = $this->restClient->get('user/' . $userId, 'User');
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $this->getRestClient()->delete('v2/organisation/' . $organisation->getId() . '/user/' . $user->getId());
+                $this->restClient->delete('v2/organisation/' . $organisation->getId() . '/user/' . $user->getId());
                 $request->getSession()->getFlashBag()->add('notice', 'User has been removed from ' . $organisation->getName());
             } catch (\Throwable $e) {
                 $this->get('logger')->error($e->getMessage());

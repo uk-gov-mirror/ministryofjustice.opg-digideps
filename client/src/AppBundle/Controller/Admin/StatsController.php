@@ -38,7 +38,7 @@ class StatsController extends AbstractController
      */
     public function statsAction(Request $request, ReportSubmissionSummaryMapper $mapper, ReportSubmissionBurFixedWidthTransformer $transformer)
     {
-        $form = $this->createForm(ReportSubmissionDownloadFilterType::class , new ReportSubmissionSummaryQuery());
+        $form = $this->createForm(ReportSubmissionDownloadFilterType::class, new ReportSubmissionSummaryQuery());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -47,7 +47,6 @@ class StatsController extends AbstractController
                 $downloadableData = $transformer->transform($reportSubmissionSummaries);
 
                 return $this->buildResponse($downloadableData);
-
             } catch (\Throwable $e) {
                 throw new DisplayableException($e);
             }
@@ -68,7 +67,7 @@ class StatsController extends AbstractController
      */
     public function satisfactionAction(Request $request, ReportSatisfactionSummaryMapper $mapper)
     {
-        $form = $this->createForm(SatisfactionFilterType::class , new ReportSatisfactionSummaryQuery());
+        $form = $this->createForm(SatisfactionFilterType::class, new ReportSatisfactionSummaryQuery());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,8 +77,6 @@ class StatsController extends AbstractController
                 $spreadsheet = $this->createSatisfactionSpreadsheet($reportSatisfactionSummaries);
 
                 $this->downloadSpreadsheet($spreadsheet);
-
-
             } catch (\Throwable $e) {
                 throw new DisplayableException($e);
             }
@@ -198,8 +195,8 @@ class StatsController extends AbstractController
         $metrics = ['satisfaction', 'reportsSubmitted', 'clients', 'registeredDeputies'];
 
         foreach ($metrics as $metric) {
-            $all = $this->getRestClient()->get('stats?metric=' . $metric . $append, 'array');
-            $byRole = $this->getRestClient()->get('stats?metric=' . $metric . '&dimension[]=deputyType' . $append, 'array');
+            $all = $this->restClient->get('stats?metric=' . $metric . $append, 'array');
+            $byRole = $this->restClient->get('stats?metric=' . $metric . '&dimension[]=deputyType' . $append, 'array');
 
             $stats[$metric] = array_merge(
                 ['all' => $all[0]['amount']],
@@ -216,7 +213,8 @@ class StatsController extends AbstractController
     /**
      * Map an array of metric responses to be addressible by deputyType
      */
-    private function mapToDeputyType(array $result): array {
+    private function mapToDeputyType(array $result): array
+    {
         $resultByDeputyType = [];
 
         foreach ($result as $resultBit) {

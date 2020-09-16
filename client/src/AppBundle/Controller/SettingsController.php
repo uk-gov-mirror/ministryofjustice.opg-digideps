@@ -94,7 +94,7 @@ class SettingsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $request->request->get('change_password')['plain_password']['first'];
-            $this->getRestClient()->put('user/' . $user->getId() . '/set-password', json_encode([
+            $this->restClient->put('user/' . $user->getId() . '/set-password', json_encode([
                 'password_plain' => $plainPassword,
             ]));
             $request->getSession()->set('login-context', 'password-update');
@@ -168,7 +168,7 @@ class SettingsController extends AbstractController
 
                 if ('declaration' === $request->get('from') && null !== $request->get('rid')) {
                     $redirectRoute = $this->generateUrl('report_declaration', ['reportId' => $request->get('rid')]);
-                } else if ($user->isDeputyPA() || $user->isDeputyProf()) {
+                } elseif ($user->isDeputyPA() || $user->isDeputyProf()) {
                     $redirectRoute = $this->generateUrl('org_profile_show');
                 } else {
                     $redirectRoute = $this->generateUrl('user_show');
@@ -176,7 +176,7 @@ class SettingsController extends AbstractController
             }
 
             try {
-                $this->getRestClient()->put('user/' . $user->getId(), $postEditDeputy, $jmsPutGroups);
+                $this->restClient->put('user/' . $user->getId(), $postEditDeputy, $jmsPutGroups);
 
                 if ($oldEmail !== $newEmail) {
                     $emailChangedEvent = (new AuditEvents($this->dateTimeProvider))

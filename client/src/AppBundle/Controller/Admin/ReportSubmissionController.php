@@ -66,9 +66,9 @@ class ReportSubmissionController extends AbstractController
         }
 
         $currentFilters = self::getFiltersFromRequest($request);
-        $ret = $this->getRestClient()->get('/report-submission?' . http_build_query($currentFilters), 'array');
+        $ret = $this->restClient->get('/report-submission?' . http_build_query($currentFilters), 'array');
 
-        $records = $this->getRestClient()->arrayToEntities(EntityDir\Report\ReportSubmission::class . '[]', $ret['records']);
+        $records = $this->restClient->arrayToEntities(EntityDir\Report\ReportSubmission::class . '[]', $ret['records']);
 
         $nOfdownloadableSubmissions = count(array_filter($records, function ($s) {
             return $s->isDownloadable();
@@ -116,7 +116,7 @@ class ReportSubmissionController extends AbstractController
             try {
                 [$retrievedDocuments, $missingDocuments] = $this->documentDownloader->retrieveDocumentsFromS3ByReportSubmissionIds($request, $reportSubmissionIds);
                 $downloadLocation = $this->documentDownloader->zipDownloadedDocuments($retrievedDocuments);
-            } catch(Throwable $e) {
+            } catch (Throwable $e) {
                 $this->addFlash('error', 'There was an error downloading the requested documents: ' . $e->getMessage());
                 return $this->redirectToRoute('admin_documents_download_ready');
             }
@@ -133,7 +133,7 @@ class ReportSubmissionController extends AbstractController
      */
     public function downloadIndividualDocument(int $submissionId, int $documentId): Response
     {
-        $client = $this->getRestClient();
+        $client = $this->restClient;
 
         /** @var EntityDir\Report\ReportSubmission $submission */
         $submission = $client->get("report-submission/{$submissionId}", 'Report\\ReportSubmission');
@@ -203,7 +203,7 @@ class ReportSubmissionController extends AbstractController
                         $totalChecked,
                         ['%count%' => $totalChecked],
                         'admin-documents'
-                        );
+                    );
 
                         $this->addFlash('notice', $notice);
                     break;
@@ -226,7 +226,7 @@ class ReportSubmissionController extends AbstractController
 
                 case self::ACTION_SYNCHRONISE:
                     foreach ($checkedBoxes as $reportSubmissionId) {
-                        $this->getRestClient()->put("report-submission/{$reportSubmissionId}/queue-documents", []);
+                        $this->restClient->put("report-submission/{$reportSubmissionId}/queue-documents", []);
                     }
             }
         }
@@ -241,7 +241,7 @@ class ReportSubmissionController extends AbstractController
     private function processArchive($checkedBoxes): void
     {
         foreach ($checkedBoxes as $reportSubmissionId) {
-            $this->getRestClient()->put("report-submission/{$reportSubmissionId}", ['archive'=>true]);
+            $this->restClient->put("report-submission/{$reportSubmissionId}", ['archive'=>true]);
         }
     }
 

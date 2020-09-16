@@ -60,9 +60,9 @@ class IndexController extends AbstractController
             http_build_query($currentFilters)
         );
 
-        $response = $this->getRestClient()->get($endpoint, 'array');
+        $response = $this->restClient->get($endpoint, 'array');
 
-        $reports = $this->getRestClient()->arrayToEntities(EntityDir\Report\Report::class . '[]', $response['reports']);
+        $reports = $this->restClient->arrayToEntities(EntityDir\Report\Report::class . '[]', $response['reports']);
 
         return [
             'filters' => $currentFilters,
@@ -88,7 +88,7 @@ class IndexController extends AbstractController
     {
         try {
             /** @var Client $client */
-            $client = $this->getRestClient()->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report']);
+            $client = $this->restClient->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report']);
         } catch (RestClientException $e) {
             throw $this->createNotFoundException();
         }
@@ -109,7 +109,7 @@ class IndexController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientUpdated = $form->getData();
             $clientUpdated->setId($client->getId());
-            $this->getRestClient()->put('client/upsert', $clientUpdated, ['pa-edit']);
+            $this->restClient->put('client/upsert', $clientUpdated, ['pa-edit']);
 
             if ($oldEmail !== $newEmail) {
                 $event = (new AuditEvents($this->dateTimeProvider))->clientEmailChanged(
@@ -122,7 +122,6 @@ class IndexController extends AbstractController
 
                 $message = empty($newEmail) ? 'Client email address removed' : '';
                 $this->logger->notice($message, $event);
-
             }
 
             $this->addFlash('notice', 'The client details have been edited');
@@ -146,7 +145,7 @@ class IndexController extends AbstractController
     public function clientArchiveAction(Request $request, $clientId)
     {
         /** @var Client $client */
-        $client = $this->getRestClient()->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report']);
+        $client = $this->restClient->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report']);
 
         // PA client profile is ATM relying on report ID, this is a working until next refactor
         $returnLink = $this->generateUrl('report_overview', ['reportId'=>$client->getCurrentReport()->getId()]);
@@ -157,7 +156,7 @@ class IndexController extends AbstractController
         $submitBtn = $form->get('save');
         if ($submitBtn->isClicked() && $form->isSubmitted() && $form->isValid()) {
             if (true === $form->get('confirmArchive')->getData()) {
-                $this->getRestClient()->apiCall('put', 'client/' . $client->getId() . '/archive', null, 'array');
+                $this->restClient->apiCall('put', 'client/' . $client->getId() . '/archive', null, 'array');
                 $this->addFlash('notice', 'The client has been archived');
                 return $this->redirectToRoute('org_dashboard');
             } else {

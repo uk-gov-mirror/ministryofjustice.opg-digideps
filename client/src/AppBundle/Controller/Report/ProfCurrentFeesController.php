@@ -62,7 +62,7 @@ class ProfCurrentFeesController extends AbstractController
                 case 'yes':
                     return $this->redirectToRoute('current_service_fee_step', ['reportId' => $reportId, 'step' => 1, 'from'=>'exist']);
                 case 'no':
-                    $this->getRestClient()->put('report/' . $reportId, $report, ['current-prof-payments-received']);
+                    $this->restClient->put('report/' . $reportId, $report, ['current-prof-payments-received']);
 
                     return $this->redirectToRoute('prof_service_fees_summary', ['reportId' => $reportId]);
             }
@@ -108,7 +108,8 @@ class ProfCurrentFeesController extends AbstractController
         // crete and handle form
         $form = $this->createForm(
             FormDir\Report\ProfServiceFeeType::class,
-            $profServiceFee, ['step' => $step]
+            $profServiceFee,
+            ['step' => $step]
         );
 
         $form->handleRequest($request);
@@ -122,7 +123,7 @@ class ProfCurrentFeesController extends AbstractController
             if ($step == 1) {
                 if (!empty($profServiceFee->getId())) {
                     // Update: update service type only
-                    $this->getRestClient()->put('prof-service-fee/' . $profServiceFee->getId(), $profServiceFee, ['prof-service-fee-serviceType']);
+                    $this->restClient->put('prof-service-fee/' . $profServiceFee->getId(), $profServiceFee, ['prof-service-fee-serviceType']);
 //                    $request->getSession()->getFlashBag()->add('notice', 'Service fee has been updated');
 
                     return $this->redirectToRoute('current_service_fee_step', ['reportId' => $reportId, 'step' => 2, 'feeId' => $profServiceFee->getId(), 'from' => $fromPage]);
@@ -140,13 +141,14 @@ class ProfCurrentFeesController extends AbstractController
 
                 if (empty($profServiceFee->getId())) { //NEW
                     // Create: POST entire entity + report
-                    $this->getRestClient()->post(
+                    $this->restClient->post(
                         'report/' . $report->getId() . '/prof-service-fee',
-                        $profServiceFee, ['report-object', 'prof-service-fees']
+                        $profServiceFee,
+                        ['report-object', 'prof-service-fees']
                     );
 //                    $request->getSession()->getFlashBag()->add('notice', 'Service fee has been added');
                 } else { // EDIT
-                    $this->getRestClient()->put('prof-service-fee/' . $profServiceFee->getId(), $profServiceFee, ['prof-service-fee-serviceType', 'prof-service-fees']);
+                    $this->restClient->put('prof-service-fee/' . $profServiceFee->getId(), $profServiceFee, ['prof-service-fee-serviceType', 'prof-service-fees']);
 //                    $request->getSession()->getFlashBag()->add('notice', 'Service fee has been updated');
                 }
 
@@ -154,7 +156,8 @@ class ProfCurrentFeesController extends AbstractController
                 if ('saveAndAddAnother' === $buttonClicked->getName()) {
                     // use step 1 to begin the loop again
                     return $this->redirectToRoute(
-                        'current_service_fee_step', [
+                        'current_service_fee_step',
+                        [
                             'reportId' => $reportId,
                             'step'     => 1,
                             'from'     => 'another', //2nd addition will have a link to go back to summary (or breadcrumbs)
@@ -217,7 +220,7 @@ class ProfCurrentFeesController extends AbstractController
             /* @var $report EntityDir\Report\Report */
             $report = $form->getData();
 
-            $this->getRestClient()->put('report/' . $reportId, $report, ['report-prof-estimate-fees']);
+            $this->restClient->put('report/' . $reportId, $report, ['report-prof-estimate-fees']);
 
             return $this->redirectToRoute(
                 'prof_service_fees_summary',
@@ -274,7 +277,7 @@ class ProfCurrentFeesController extends AbstractController
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
 
         if ($report->hasProfServiceFeeWithId($feeId)) {
-            $this->getRestClient()->delete("/prof-service-fee/{$feeId}");
+            $this->restClient->delete("/prof-service-fee/{$feeId}");
             $request->getSession()->getFlashBag()->add('notice', 'Service fee removed');
         }
 

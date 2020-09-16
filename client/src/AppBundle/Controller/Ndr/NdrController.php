@@ -162,7 +162,8 @@ class NdrController extends AbstractController
         $response = new Response($pdfBinary);
         $response->headers->set('Content-Type', 'application/pdf');
 
-        $attachmentName = sprintf('DigiNdr-%s_%s.pdf',
+        $attachmentName = sprintf(
+            'DigiNdr-%s_%s.pdf',
             $ndr->getSubmitDate() instanceof \DateTime ? $ndr->getSubmitDate()->format('Y-m-d') : 'n-a-',
             $ndr->getClient()->getCaseNumber()
         );
@@ -230,7 +231,7 @@ class NdrController extends AbstractController
                 true
             );
 
-            $this->getRestClient()->put('ndr/' . $ndr->getId() . '/submit?documentId=' . $document->getId(), $ndr, ['submit']);
+            $this->restClient->put('ndr/' . $ndr->getId() . '/submit?documentId=' . $document->getId(), $ndr, ['submit']);
 
             /** @var User */
             $user = $this->getUserWithData(['user-clients', 'report', 'client-reports']);
@@ -286,7 +287,7 @@ class NdrController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Store in database
-            $this->getRestClient()->post('satisfaction', [
+            $this->restClient->post('satisfaction', [
                 'score' => $form->get('satisfactionLevel')->getData(),
                 'comments' => $comments,
                 'reportType' => $ndr->getType(),
@@ -356,7 +357,7 @@ class NdrController extends AbstractController
         $clients = $user->getClients();
         $clientId = array_shift($clients)->getId();
 
-        return  $this->getRestClient()->get(
+        return  $this->restClient->get(
             'client/' . $clientId,
             'Client',
             ['client', 'client-users', 'user']

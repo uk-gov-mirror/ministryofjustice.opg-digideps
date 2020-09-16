@@ -35,7 +35,7 @@ class SearchController extends AbstractController
             $filters = $form->getData() + $this->getDefaultFilters($request);
         }
 
-        $clients = $this->getRestClient()->get('client/get-all?' . http_build_query($filters), 'Client[]');
+        $clients = $this->restClient->get('client/get-all?' . http_build_query($filters), 'Client[]');
 
         return $this->buildViewParams($form, $clients, $filters);
     }

@@ -122,7 +122,7 @@ class ReportController extends AbstractController
         /** @var SubmitButton $buttonClicked */
         $buttonClicked = $form->getClickedButton();
 
-        $reviewChecklist = $this->getRestClient()->get('report/' . $report->getId() . '/checklist', 'Report\\ReviewChecklist');
+        $reviewChecklist = $this->restClient->get('report/' . $report->getId() . '/checklist', 'Report\\ReviewChecklist');
         /** @var Form $reviewForm */
         $reviewForm = $this->createForm(ReviewChecklistType::class, $reviewChecklist);
         $reviewForm->handleRequest($request);
@@ -135,9 +135,9 @@ class ReportController extends AbstractController
             }
 
             if (!empty($reviewChecklist->getId())) {
-                $this->getRestClient()->put('report/' . $report->getId() . '/checklist', $reviewChecklist);
+                $this->restClient->put('report/' . $report->getId() . '/checklist', $reviewChecklist);
             } else {
-                $this->getRestClient()->post('report/' . $report->getId() . '/checklist', $reviewChecklist);
+                $this->restClient->post('report/' . $report->getId() . '/checklist', $reviewChecklist);
             }
 
             if ($button->getName() === ReviewChecklistType::SUBMIT_ACTION) {
@@ -154,11 +154,11 @@ class ReportController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!empty($checklist->getId())) {
-                $this->getRestClient()->put('report/' . $report->getId() . '/checked', $checklist, [
+                $this->restClient->put('report/' . $report->getId() . '/checked', $checklist, [
                     'report-checklist', 'checklist-information'
                 ]);
             } else {
-                $this->getRestClient()->post('report/' . $report->getId() . '/checked', $checklist, [
+                $this->restClient->post('report/' . $report->getId() . '/checked', $checklist, [
                     'report-checklist', 'checklist-information'
                 ]);
             }
@@ -233,7 +233,7 @@ class ReportController extends AbstractController
     protected function queueChecklistForSyncing(Report $report): void
     {
         $report->getChecklist()->setSynchronisationStatus(Checklist::SYNC_STATUS_QUEUED);
-        $this->getRestClient()->put('report/' . $report->getId() . '/checked', $report->getChecklist(), ['synchronisation']);
+        $this->restClient->put('report/' . $report->getId() . '/checked', $report->getChecklist(), ['synchronisation']);
     }
 
     /**
@@ -257,7 +257,8 @@ class ReportController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $attachmentName = sprintf('DigiChecklist-%s_%s_%s.pdf',
+        $attachmentName = sprintf(
+            'DigiChecklist-%s_%s_%s.pdf',
             $report->getEndDate()->format('Y'),
             $report->getSubmitDate() instanceof \DateTime ? $report->getSubmitDate()->format('Y-m-d') : 'n-a-', //some old reports have no submission date
             $report->getClient()->getCaseNumber()
@@ -380,7 +381,7 @@ class ReportController extends AbstractController
         if (preg_match('/^\d+$/', $form['dueDateChoice']->getData())) {
             $newDueDate = new \DateTime();
             $newDueDate->modify("+{$form['dueDateChoice']->getData()} weeks");
-        } else if ($form['dueDateChoice']->getData() == 'custom' && $form['dueDateCustom']->getData() instanceof \DateTime) {
+        } elseif ($form['dueDateChoice']->getData() == 'custom' && $form['dueDateCustom']->getData() instanceof \DateTime) {
             $newDueDate = $form['dueDateCustom']->getData();
         }
 
@@ -417,7 +418,7 @@ class ReportController extends AbstractController
             }
 
             $this->populateReportFromSession($report, $sessionData);
-            $this->getRestClient()->put('report/' . $report->getId(), $report, ['report_type', 'report_due_date']);
+            $this->restClient->put('report/' . $report->getId(), $report, ['report_type', 'report_due_date']);
 
             if ($form->has('confirm') && $form['confirm']->getData() === 'yes' && $report->isSubmitted()) {
                 $this->unsubmitReport($report);
@@ -493,7 +494,7 @@ class ReportController extends AbstractController
             $report = $this->getReport(intval($id));
             $report->setSubmitted(true);
             $report->setUnSubmitDate(null);
-            $this->getRestClient()->put('report/' . $id, $report, ['submitted', 'unsubmit_date']);
+            $this->restClient->put('report/' . $id, $report, ['submitted', 'unsubmit_date']);
             return $this->redirect($this->generateUrl('admin_client_details', ['id'=>$report->getClient()->getId()]));
         }
 
@@ -510,7 +511,7 @@ class ReportController extends AbstractController
     {
         $report->setUnSubmitDate(new \DateTime());
 
-        $this->getRestClient()->put('report/' . $report->getId() . '/unsubmit', $report, [
+        $this->restClient->put('report/' . $report->getId() . '/unsubmit', $report, [
             'submitted', 'unsubmit_date', 'report_unsubmitted_sections_list', 'startEndDates', 'report_due_date'
         ]);
     }
@@ -529,7 +530,7 @@ class ReportController extends AbstractController
         $checklist->setFurtherInformationReceived($content);
 
         $httpMethod = empty($checklist->getId()) ? 'post' : 'put';
-        $this->getRestClient()->{$httpMethod}('report/' . $report->getId() . '/checked', $checklist, [
+        $this->restClient->{$httpMethod}('report/' . $report->getId() . '/checked', $checklist, [
             'report-checklist', 'checklist-information'
         ]);
     }

@@ -63,7 +63,7 @@ class AssetController extends AbstractController
                 case 0: // yes
                     return $this->redirectToRoute('assets_type', ['reportId' => $reportId,]);
                 case 1: //no
-                    $this->getRestClient()->put('report/' . $reportId, $report, ['noAssetsToAdd']);
+                    $this->restClient->put('report/' . $reportId, $report, ['noAssetsToAdd']);
                     return $this->redirectToRoute('assets_summary', ['reportId' => $reportId]);
             }
         }
@@ -125,7 +125,7 @@ class AssetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $asset = $form->getData();
-            $this->getRestClient()->post("report/{$reportId}/asset", $asset);
+            $this->restClient->post("report/{$reportId}/asset", $asset);
 
             return $this->redirect($this->generateUrl('assets_add_another', ['reportId' => $reportId]));
         }
@@ -148,7 +148,7 @@ class AssetController extends AbstractController
     {
         $report = $this->getReportIfNotSubmitted($reportId);
         if ($assetId) {
-            $asset = $this->getRestClient()->get("report/{$reportId}/asset/{$assetId}", 'Report\\Asset');
+            $asset = $this->restClient->get("report/{$reportId}/asset/{$assetId}", 'Report\\Asset');
         } else {
             $asset = new Report\AssetOther();
             $asset->setReport($report);
@@ -160,7 +160,7 @@ class AssetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $asset = $form->getData();
-            $this->getRestClient()->put("report/{$reportId}/asset/{$assetId}", $asset);
+            $this->restClient->put("report/{$reportId}/asset/{$assetId}", $asset);
             $request->getSession()->getFlashBag()->add('notice', 'Asset edited');
 
             return $this->redirect($this->generateUrl('assets', ['reportId' => $reportId]));
@@ -262,7 +262,7 @@ class AssetController extends AbstractController
 
             // edit mode: save immediately and go back to summary page
             if ($assetId) {
-                $this->getRestClient()->put("report/{$reportId}/asset/{$assetId}", $asset);
+                $this->restClient->put("report/{$reportId}/asset/{$assetId}", $asset);
                 $request->getSession()->getFlashBag()->add('notice', 'Asset edited');
 
                 return $this->redirect($this->generateUrl('assets_summary', ['reportId' => $reportId]));
@@ -300,7 +300,7 @@ class AssetController extends AbstractController
 
             // last step: save
             if ($step == $totalSteps) {
-                $this->getRestClient()->post("report/{$reportId}/asset", $asset);
+                $this->restClient->post("report/{$reportId}/asset", $asset);
 
                 return $this->redirect($this->generateUrl('assets_add_another', ['reportId' => $reportId]));
             }
@@ -357,14 +357,14 @@ class AssetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($report->hasAssetWithId($assetId)) {
-                $this->getRestClient()->delete("/report/{$reportId}/asset/{$assetId}");
+                $this->restClient->delete("/report/{$reportId}/asset/{$assetId}");
                 $request->getSession()->getFlashBag()->add('notice', 'Asset removed');
             }
 
             return $this->redirect($this->generateUrl('assets_summary', ['reportId' => $reportId]));
         }
 
-        $asset = $this->getRestClient()->get("report/{$reportId}/asset/{$assetId}", 'Report\\Asset');
+        $asset = $this->restClient->get("report/{$reportId}/asset/{$assetId}", 'Report\\Asset');
 
         if ($asset instanceof EntityDir\Report\AssetProperty) {
             $summary = [

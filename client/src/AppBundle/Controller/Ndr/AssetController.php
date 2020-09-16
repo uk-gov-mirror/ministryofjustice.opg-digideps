@@ -58,7 +58,7 @@ class AssetController extends AbstractController
                 case 0: // yes
                     return $this->redirectToRoute('ndr_assets_type', ['ndrId' => $ndrId,]);
                 case 1: //no
-                    $this->getRestClient()->put('ndr/' . $ndrId, $ndr, ['noAssetsToAdd']);
+                    $this->restClient->put('ndr/' . $ndrId, $ndr, ['noAssetsToAdd']);
                     return $this->redirectToRoute('ndr_assets_summary', ['ndrId' => $ndrId]);
             }
         }
@@ -120,7 +120,7 @@ class AssetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $asset = $form->getData();
-            $this->getRestClient()->post("ndr/{$ndrId}/asset", $asset);
+            $this->restClient->post("ndr/{$ndrId}/asset", $asset);
 
             return $this->redirect($this->generateUrl('ndr_assets_add_another', ['ndrId' => $ndrId]));
         }
@@ -143,7 +143,7 @@ class AssetController extends AbstractController
     {
         $ndr = $this->getNdrIfNotSubmitted($ndrId, self::$jmsGroups);
         if ($assetId) {
-            $asset = $this->getRestClient()->get("ndr/{$ndrId}/asset/{$assetId}", 'Ndr\\Asset');
+            $asset = $this->restClient->get("ndr/{$ndrId}/asset/{$assetId}", 'Ndr\\Asset');
         } else {
             $asset = new EntityDir\Ndr\AssetOther();
             $asset->setndr($ndr);
@@ -155,7 +155,7 @@ class AssetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $asset = $form->getData();
-            $this->getRestClient()->put("ndr/{$ndrId}/asset/{$assetId}", $asset);
+            $this->restClient->put("ndr/{$ndrId}/asset/{$assetId}", $asset);
             $request->getSession()->getFlashBag()->add('notice', 'Asset edited');
 
             return $this->redirect($this->generateUrl('ndr_assets', ['ndrId' => $ndrId]));
@@ -255,7 +255,7 @@ class AssetController extends AbstractController
 
             // edit mode: save immediately and go back to summary page
             if ($assetId) {
-                $this->getRestClient()->put("ndr/{$ndrId}/asset/{$assetId}", $asset);
+                $this->restClient->put("ndr/{$ndrId}/asset/{$assetId}", $asset);
                 $request->getSession()->getFlashBag()->add('notice', 'Asset edited');
 
                 return $this->redirect($this->generateUrl('ndr_assets_summary', ['ndrId' => $ndrId]));
@@ -293,7 +293,7 @@ class AssetController extends AbstractController
 
             // last step: save
             if ($step == $totalSteps) {
-                $this->getRestClient()->post("ndr/{$ndrId}/asset", $asset);
+                $this->restClient->post("ndr/{$ndrId}/asset", $asset);
 
                 return $this->redirect($this->generateUrl('ndr_assets_add_another', ['ndrId' => $ndrId]));
             }
@@ -351,14 +351,14 @@ class AssetController extends AbstractController
             $ndr = $this->getNdrIfNotSubmitted($ndrId, self::$jmsGroups);
 
             if ($ndr->hasAssetWithId($assetId)) {
-                $this->getRestClient()->delete("/ndr/{$ndrId}/asset/{$assetId}");
+                $this->restClient->delete("/ndr/{$ndrId}/asset/{$assetId}");
                 $request->getSession()->getFlashBag()->add('notice', 'Asset removed');
             }
 
             return $this->redirect($this->generateUrl('ndr_assets', ['ndrId' => $ndrId]));
         }
 
-        $asset = $this->getRestClient()->get("ndr/{$ndrId}/asset/{$assetId}", 'Ndr\\Asset');
+        $asset = $this->restClient->get("ndr/{$ndrId}/asset/{$assetId}", 'Ndr\\Asset');
 
         if ($asset instanceof EntityDir\Ndr\AssetProperty) {
             $summary = [

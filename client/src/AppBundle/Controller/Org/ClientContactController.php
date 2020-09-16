@@ -27,7 +27,7 @@ class ClientContactController extends AbstractController
         $clientId = $request->get('clientId');
 
         /** @var $client EntityDir\Client */
-        $client = $this->getRestClient()->get('client/' . $clientId, 'Client', ['client', 'client-users', 'report-id', 'current-report', 'user']);
+        $client = $this->restClient->get('client/' . $clientId, 'Client', ['client', 'client-users', 'report-id', 'current-report', 'user']);
         if (!isset($clientId) || !($client instanceof EntityDir\Client)) {
             throw $this->createNotFoundException('Client not found');
         }
@@ -41,7 +41,10 @@ class ClientContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->post('clients/' . $client->getId() . '/clientcontacts', $form->getData(), ['add_clientcontact']
+            $this->restClient->post(
+                'clients/' . $client->getId() . '/clientcontacts',
+                $form->getData(),
+                ['add_clientcontact']
             );
             $request->getSession()->getFlashBag()->add('notice', 'The contact has been added');
 
@@ -72,7 +75,10 @@ class ClientContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->put('/clientcontacts/' . $id, $form->getData(), ['edit_clientcontact']
+            $this->restClient->put(
+                '/clientcontacts/' . $id,
+                $form->getData(),
+                ['edit_clientcontact']
             );
             $request->getSession()->getFlashBag()->add('notice', 'The contact has been updated');
             return $this->redirect($backLink);
@@ -101,7 +107,7 @@ class ClientContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $this->getRestClient()->delete('clientcontacts/' . $id);
+                $this->restClient->delete('clientcontacts/' . $id);
                 $request->getSession()->getFlashBag()->add('notice', 'Contact has been removed');
             } catch (\Throwable $e) {
                 $this->get('logger')->error($e->getMessage());
@@ -134,7 +140,7 @@ class ClientContactController extends AbstractController
      */
     private function getContactById($id)
     {
-        return $this->getRestClient()->get(
+        return $this->restClient->get(
             'clientcontacts/' . $id,
             'ClientContact',
             ['clientcontact', 'clientcontact-client', 'client', 'client-users', 'current-report', 'report-id', 'user']

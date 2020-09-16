@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
 use AppBundle\Entity as EntityDir;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ClientContactController extends RestController
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @Route("/clients/{clientId}/clientcontacts", name="clientcontact_add", methods={"POST"})
      * @Security("has_role('ROLE_ORG')")
@@ -107,7 +118,7 @@ class ClientContactController extends RestController
             $this->getEntityManager()->remove($clientContact);
             $this->getEntityManager()->flush($clientContact);
         } catch (\Throwable $e) {
-            $this->get('logger')->error('Failed to delete client contact ID: ' . $id . ' - ' . $e->getMessage());
+            $this->logger->error('Failed to delete client contact ID: ' . $id . ' - ' . $e->getMessage());
         }
 
         return [];

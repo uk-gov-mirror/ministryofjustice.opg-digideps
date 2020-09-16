@@ -37,15 +37,14 @@ class UserController extends AbstractController
         DeputyProvider $deputyProvider,
         string $action,
         string $token
-    ): Response
-    {
+    ): Response {
         /** @var TranslatorInterface */
         $translator = $this->get('translator');
         $isActivatePage = 'activate' === $action;
 
         // check $token is correct
         try {
-            $user = $this->getRestClient()->loadUserByToken($token);
+            $user = $this->restClient->loadUserByToken($token);
             /* @var $user EntityDir\User */
         } catch (\Throwable $e) {
             return $this->renderError('This link is not working or has already been used');
@@ -72,9 +71,12 @@ class UserController extends AbstractController
         // define form and template that differs depending on the action (activate or password-reset)
         if ($isActivatePage) {
             $passwordMismatchMessage = $translator->trans('password.validation.passwordMismatch', [], 'user-activate');
-            $form = $this->createForm(FormDir\SetPasswordType::class, $user, [ 'passwordMismatchMessage' => $passwordMismatchMessage, 'showTermsAndConditions'  => $user->isDeputy()
+            $form = $this->createForm(
+                FormDir\SetPasswordType::class,
+                $user,
+                [ 'passwordMismatchMessage' => $passwordMismatchMessage, 'showTermsAndConditions'  => $user->isDeputy()
                                        ]
-                                     );
+            );
             $template = 'AppBundle:User:activate.html.twig';
         } else { // 'password-reset'
             $passwordMismatchMessage = $translator->trans('form.password.validation.passwordMismatch', [], 'password-reset');
@@ -98,7 +100,7 @@ class UserController extends AbstractController
             ]);
 
             // set password for user
-            $this->getRestClient()->put('user/' . $user->getId() . '/set-password', $data);
+            $this->restClient->put('user/' . $user->getId() . '/set-password', $data);
 
             // log in
             $clientToken = new UsernamePasswordToken($user, null, 'secured_area', $user->getRoles());
@@ -136,12 +138,12 @@ class UserController extends AbstractController
     public function activateLinkSendAction(string $token): Response
     {
         // check $token is correct
-        $user = $this->getRestClient()->loadUserByToken($token);
+        $user = $this->restClient->loadUserByToken($token);
         /* @var $user EntityDir\User */
 
         // recreate token
         // the endpoint will also send the activation email
-        $this->getRestClient()->userRecreateToken($user->getEmail(), 'activate');
+        $this->restClient->userRecreateToken($user->getEmail(), 'activate');
 
         $activationEmail = $this->getMailFactory()->createActivationEmail($user);
         $this->getMailSender()->send($activationEmail);
@@ -185,7 +187,7 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->put('user/' . $user->getId(), $form->getData(), $jmsPutGroups);
+            $this->restClient->put('user/' . $user->getId(), $form->getData(), $jmsPutGroups);
 
             // lay deputies are redirected to adding a client (Step.3)
             if ($user->isLayDeputy()) {
@@ -224,7 +226,7 @@ class UserController extends AbstractController
             $logger->warning('Reset password request for : ' . $emailAddress);
 
             try {
-                $user = $this->getRestClient()->userRecreateToken($user->getEmail(), 'pass-reset');
+                $user = $this->restClient->userRecreateToken($user->getEmail(), 'pass-reset');
 
                 $logger->warning('Sending reset email to ' . $disguisedEmail);
 
@@ -275,7 +277,7 @@ class UserController extends AbstractController
             $data = $form->getData();
 
             try {
-                $user = $this->getRestClient()->registerUser($data);
+                $user = $this->restClient->registerUser($data);
                 $activationEmail = $this->getMailFactory()->createActivationEmail($user);
                 $this->getMailSender()->send($activationEmail);
 
@@ -299,7 +301,8 @@ class UserController extends AbstractController
 
                     case 422:
                         $form->addError(new FormError(
-                            $translator->trans('email.first.existingError', [], 'register')));
+                            $translator->trans('email.first.existingError', [], 'register')
+                        ));
                         break;
 
                     case 400:
@@ -339,12 +342,12 @@ class UserController extends AbstractController
      */
     public function agreeTermsUseAction(Request $request, string $token): Response
     {
-        $user = $this->getRestClient()->loadUserByToken($token);
+        $user = $this->restClient->loadUserByToken($token);
 
         $form = $this->createForm(FormDir\User\AgreeTermsType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->agreeTermsUse($token);
+            $this->restClient->agreeTermsUse($token);
 
             return $this->redirectToRoute('user_activate', ['token' => $token, 'action' => 'activate']);
         }

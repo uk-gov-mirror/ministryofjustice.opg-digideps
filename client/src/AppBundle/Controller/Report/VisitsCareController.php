@@ -54,9 +54,12 @@ class VisitsCareController extends AbstractController
             ->setCurrentStep($step)->setTotalSteps($totalSteps)
             ->setRouteBaseParams(['reportId' => $reportId]);
 
-        $form = $this->createForm(FormDir\Report\VisitsCareType::class, $visitsCare, [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $report->getClient()->getFirstname()
+        $form = $this->createForm(
+            FormDir\Report\VisitsCareType::class,
+            $visitsCare,
+            [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $report->getClient()->getFirstname()
                                    ]
-                                 );
+        );
         $form->handleRequest($request);
 
         if ($form->get('save')->isClicked() && $form->isSubmitted() && $form->isValid()) {
@@ -67,9 +70,9 @@ class VisitsCareController extends AbstractController
                 ->keepOnlyRelevantVisitsCareData();
 
             if ($visitsCare->getId() == null) {
-                $this->getRestClient()->post('report/visits-care', $data, ['visits-care', 'report-id']);
+                $this->restClient->post('report/visits-care', $data, ['visits-care', 'report-id']);
             } else {
-                $this->getRestClient()->put('report/visits-care/' . $visitsCare->getId(), $data, self::$jmsGroups);
+                $this->restClient->put('report/visits-care/' . $visitsCare->getId(), $data, self::$jmsGroups);
             }
 
             if ($fromPage == 'summary') {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -23,6 +23,22 @@ use Symfony\Component\Routing\Router;
 abstract class AbstractController extends Controller
 {
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var RestClient
+     */
+    public $restClient;
+
+    public function __construct(LoggerInterface $logger, RestClient $restClient)
+    {
+        $this->logger = $logger;
+        $this->restClient = $restClient;
+    }
+
+    /**
      * @return RestClient
      */
     protected function getRestClient()
@@ -46,7 +62,7 @@ abstract class AbstractController extends Controller
         /** @var User */
         $user = $this->getUser();
 
-        return $this->getRestClient()->get('user/' . $user->getId(), 'User', $jmsGroups);
+        return $this->restClient->get('user/' . $user->getId(), 'User', $jmsGroups);
     }
 
     /**
@@ -99,7 +115,7 @@ abstract class AbstractController extends Controller
         sort($groups); // helps HTTP caching
 
         try {
-            $report = $this->getRestClient()->get("report/{$reportId}", 'Report\\Report', $groups);
+            $report = $this->restClient->get("report/{$reportId}", 'Report\\Report', $groups);
         } catch (RestClientException $e) {
             if ($e->getStatusCode() === 403 || $e->getStatusCode() === 404) {
                 throw $this->createNotFoundException($e->getData()['message']);
@@ -149,7 +165,7 @@ abstract class AbstractController extends Controller
         $groups[] = 'client';
         $groups = array_unique($groups);
 
-        return $this->getRestClient()->get("ndr/{$ndrId}", 'Ndr\Ndr', $groups);
+        return $this->restClient->get("ndr/{$ndrId}", 'Ndr\Ndr', $groups);
     }
 
     /**
@@ -231,11 +247,15 @@ abstract class AbstractController extends Controller
     {
         $referer = $request->headers->get('referer');
 
-        if (!is_string($referer)) return null;
+        if (!is_string($referer)) {
+            return null;
+        }
 
         $refererUrlPath = parse_url($referer, \PHP_URL_PATH);
 
-        if (!$refererUrlPath) return null;
+        if (!$refererUrlPath) {
+            return null;
+        }
 
         try {
             $routeParams = $this->getRouter()->match($refererUrlPath);
@@ -262,7 +282,7 @@ abstract class AbstractController extends Controller
      */
     protected function generateClientProfileLink(Client $client)
     {
-        $client = $this->getRestClient()->get('client/' . $client->getId(), 'Client', ['client', 'report-id', 'current-report']);
+        $client = $this->restClient->get('client/' . $client->getId(), 'Client', ['client', 'report-id', 'current-report']);
 
         $report = $client->getCurrentReport();
 

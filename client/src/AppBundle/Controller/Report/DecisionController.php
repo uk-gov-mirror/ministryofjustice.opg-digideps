@@ -61,7 +61,7 @@ class DecisionController extends AbstractController
             $data = $form->getData();
             $data->setReport($report);
 
-            $this->getRestClient()->put('report/' . $reportId . '/mental-capacity', $data, ['mental-capacity']);
+            $this->restClient->put('report/' . $reportId . '/mental-capacity', $data, ['mental-capacity']);
             if ($fromSummaryPage) {
                 $request->getSession()->getFlashBag()->add('notice', 'Answer edited');
             }
@@ -99,7 +99,7 @@ class DecisionController extends AbstractController
 
             $data->setReport($report);
 
-            $this->getRestClient()->put('report/' . $reportId . '/mental-capacity', $data, ['mental-assessment-date']);
+            $this->restClient->put('report/' . $reportId . '/mental-capacity', $data, ['mental-assessment-date']);
             if ($fromSummaryPage) {
                 $request->getSession()->getFlashBag()->add('notice', 'Answer edited');
             }
@@ -130,9 +130,9 @@ class DecisionController extends AbstractController
                 case 'yes':
                     return $this->redirectToRoute('decisions_add', ['reportId' => $reportId, 'from'=>'decisions_exist']);
                 case 'no':
-                    $this->getRestClient()->put('report/' . $reportId, $report, ['reasonForNoDecisions']);
+                    $this->restClient->put('report/' . $reportId, $report, ['reasonForNoDecisions']);
                     foreach ($report->getDecisions() as $decision) {
-                        $this->getRestClient()->delete('/report/decision/' . $decision->getId());
+                        $this->restClient->delete('/report/decision/' . $decision->getId());
                     }
                     return $this->redirectToRoute('decisions_summary', ['reportId' => $reportId]);
             }
@@ -167,7 +167,7 @@ class DecisionController extends AbstractController
             $data = $form->getData();
             $data->setReport($report);
 
-            $this->getRestClient()->post('report/decision', $data, ['decision', 'report-id']);
+            $this->restClient->post('report/decision', $data, ['decision', 'report-id']);
 
             return $this->redirect($this->generateUrl('decisions_add_another', ['reportId' => $reportId]));
         }
@@ -215,7 +215,7 @@ class DecisionController extends AbstractController
     public function editAction(Request $request, $reportId, $decisionId)
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $decision = $this->getRestClient()->get('report/decision/' . $decisionId, 'Report\\Decision');
+        $decision = $this->restClient->get('report/decision/' . $decisionId, 'Report\\Decision');
         $decision->setReport($report);
 
         $form = $this->createForm(FormDir\Report\DecisionType::class, $decision);
@@ -225,7 +225,7 @@ class DecisionController extends AbstractController
             $data = $form->getData();
             $data->setReport($report);
 
-            $this->getRestClient()->put('report/decision', $data, ['decision']);
+            $this->restClient->put('report/decision', $data, ['decision']);
 
             $request->getSession()->getFlashBag()->add('notice', 'Decision edited');
 
@@ -277,7 +277,7 @@ class DecisionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->delete("/report/decision/{$decisionId}");
+            $this->restClient->delete("/report/decision/{$decisionId}");
 
             $request->getSession()->getFlashBag()->add(
                 'notice',
@@ -288,7 +288,7 @@ class DecisionController extends AbstractController
         }
 
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $decision = $this->getRestClient()->get('report/decision/' . $decisionId, 'Report\\Decision');
+        $decision = $this->restClient->get('report/decision/' . $decisionId, 'Report\\Decision');
 
         return [
             'translationDomain' => 'report-decisions',

@@ -79,7 +79,7 @@ class IndexController extends AbstractController
             $filters = $form->getData() + $filters;
         }
 
-        $users = $this->getRestClient()->get('user/get-all?' . http_build_query($filters), 'User[]');
+        $users = $this->restClient->get('user/get-all?' . http_build_query($filters), 'User[]');
 
         return [
             'form'    => $form->createView(),
@@ -98,8 +98,7 @@ class IndexController extends AbstractController
         RestClient $restClient,
         MailFactory $mailFactory,
         MailSenderInterface $mailSender
-    )
-    {
+    ) {
         $form = $this->createForm(FormDir\Admin\AddUserType::class, new EntityDir\User());
 
         $form->handleRequest($request);
@@ -185,7 +184,7 @@ class IndexController extends AbstractController
             $updateUser = $form->getData();
 
             try {
-                $this->getRestClient()->put('user/' . $user->getId(), $updateUser, ['admin_edit_user']);
+                $this->restClient->put('user/' . $user->getId(), $updateUser, ['admin_edit_user']);
 
                 if ($oldEmail !== $newEmail) {
                     $event = (new AuditEvents($this->dateTimeProvider))->userEmailChanged(
@@ -243,12 +242,12 @@ class IndexController extends AbstractController
     private function getPopulatedUser($id): User
     {
         /* @var User $user */
-        $user = $this->getRestClient()->get("user/{$id}", "User", ["user-rolename"]);
+        $user = $this->restClient->get("user/{$id}", "User", ["user-rolename"]);
 
         /** @var array $groups */
         $groups = ($user->isDeputyOrg()) ? ["user", "user-organisations"] : ["user", "user-clients", "client", "client-reports"];
 
-        return $this->getRestClient()->get("user/{$id}", "User", $groups);
+        return $this->restClient->get("user/{$id}", "User", $groups);
     }
 
     /**
@@ -271,14 +270,14 @@ class IndexController extends AbstractController
      */
     public function editNdrAction(Request $request, $id)
     {
-        $ndr = $this->getRestClient()->get('ndr/' . $id, 'Ndr\Ndr', ['ndr', 'client', 'client-users', 'user']);
+        $ndr = $this->restClient->get('ndr/' . $id, 'Ndr\Ndr', ['ndr', 'client', 'client-users', 'user']);
         $ndrForm = $this->createForm(FormDir\NdrType::class, $ndr);
         if ($request->getMethod() == 'POST') {
             $ndrForm->handleRequest($request);
 
             if ($ndrForm->isSubmitted() && $ndrForm->isValid()) {
                 $updateNdr = $ndrForm->getData();
-                $this->getRestClient()->put('ndr/' . $id, $updateNdr, ['start_date']);
+                $this->restClient->put('ndr/' . $id, $updateNdr, ['start_date']);
                 $this->addFlash('notice', 'Your changes were saved');
             }
         }
@@ -301,7 +300,7 @@ class IndexController extends AbstractController
     public function deleteConfirmAction($id)
     {
         /** @var EntityDir\User $userToDelete */
-        $userToDelete = $this->getRestClient()->get("user/{$id}", 'User');
+        $userToDelete = $this->restClient->get("user/{$id}", 'User');
 
         $this->denyAccessUnlessGranted(UserVoter::DELETE_USER, $userToDelete, 'Unable to delete this user');
 
@@ -318,10 +317,10 @@ class IndexController extends AbstractController
      */
     public function deleteAction($id)
     {
-        $user = $this->getRestClient()->get("user/{$id}", 'User', ['user', 'client', 'client-reports', 'report']);
+        $user = $this->restClient->get("user/{$id}", 'User', ['user', 'client', 'client-reports', 'report']);
 
         try {
-            $this->getRestClient()->delete('user/' . $id);
+            $this->restClient->delete('user/' . $id);
 
             $event = (new AuditEvents($this->dateTimeProvider))->userDeleted(
                 AuditEvents::TRIGGER_ADMIN_BUTTON,
@@ -335,7 +334,8 @@ class IndexController extends AbstractController
             return $this->redirect($this->generateUrl('admin_homepage'));
         } catch (\Throwable $e) {
             $this->logger->warning(
-                sprintf('Error while deleting deputy: %s', $e->getMessage()), ['deputy_email' => $user->getEmail()]
+                sprintf('Error while deleting deputy: %s', $e->getMessage()),
+                ['deputy_email' => $user->getEmail()]
             );
 
             $this->addFlash('error', 'There was a problem deleting the deputy - please try again later');
@@ -367,7 +367,7 @@ class IndexController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('type')->getData() === 'lay') {
                 return new RedirectResponse($router->generate('casrec_upload'));
-            } else if ($form->get('type')->getData() === 'org') {
+            } elseif ($form->get('type')->getData() === 'org') {
                 return new RedirectResponse($router->generate('admin_org_upload'));
             }
         }
@@ -408,8 +408,8 @@ class IndexController extends AbstractController
                 if (count($data) < $chunkSize) {
                     $compressedData = CsvUploader::compressData($data);
 
-                    $this->getRestClient()->delete('casrec/delete-by-source/'.$source);
-                    $ret = $this->getRestClient()->setTimeout(600)->post('v2/lay-deputyship/upload', $compressedData);
+                    $this->restClient->delete('casrec/delete-by-source/'.$source);
+                    $ret = $this->restClient->setTimeout(600)->post('v2/lay-deputyship/upload', $compressedData);
                     $this->addFlash(
                         'notice',
                         sprintf('%d record uploaded, %d error(s)', $ret['added'], count($ret['errors']))
@@ -446,7 +446,7 @@ class IndexController extends AbstractController
         return [
             'nOfChunks'      => $request->get('nOfChunks'),
             'source'         => $request->get('source'),
-            'currentRecords' => $this->getRestClient()->get('casrec/count', 'array'),
+            'currentRecords' => $this->restClient->get('casrec/count', 'array'),
             'form'           => $form->createView(),
             'maxUploadSize'  => min([ini_get('upload_max_filesize'), ini_get('post_max_size')]),
         ];
@@ -474,7 +474,7 @@ class IndexController extends AbstractController
                     ])
                     ->getData();
                 $compressedData = CsvUploader::compressData($data);
-                $ret = $this->getRestClient()->setTimeout(600)->post('codeputy/mldupgrade', $compressedData);
+                $ret = $this->restClient->setTimeout(600)->post('codeputy/mldupgrade', $compressedData);
                 $this->addFlash(
                     'notice',
                     sprintf('Your file contained %d deputy numbers, %d were updated, with %d error(s)', $ret['requested_mld_upgrades'], $ret['updated'], count($ret['errors']))
@@ -497,7 +497,7 @@ class IndexController extends AbstractController
         }
 
         return [
-            'currentMldUsers' => $this->getRestClient()->get('codeputy/count', 'array'),
+            'currentMldUsers' => $this->restClient->get('codeputy/count', 'array'),
             'form'            => $form->createView(),
             'maxUploadSize'   => min([ini_get('upload_max_filesize'), ini_get('post_max_size')]),
         ];
@@ -600,8 +600,7 @@ class IndexController extends AbstractController
         MailSenderInterface $mailSender,
         LoggerInterface $logger,
         RestClient $restClient
-    )
-    {
+    ) {
         try {
             $user = $restClient->userRecreateToken($email, 'pass-reset');
             $resetPasswordEmail = $mailFactory->createActivationEmail($user);

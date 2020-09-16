@@ -56,9 +56,12 @@ class IncomeBenefitController extends AbstractController
             ->setCurrentStep($step)->setTotalSteps($totalSteps)
             ->setRouteBaseParams(['ndrId' => $ndrId]);
 
-        $form = $this->createForm(FormDir\Ndr\IncomeBenefitType::class, $ndr, [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $ndr->getClient()->getFirstname()
+        $form = $this->createForm(
+            FormDir\Ndr\IncomeBenefitType::class,
+            $ndr,
+            [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $ndr->getClient()->getFirstname()
                                    ]
-                                 );
+        );
         $form->handleRequest($request);
 
         if ($form->get('save')->isClicked() && $form->isSubmitted() && $form->isValid()) {
@@ -72,7 +75,7 @@ class IncomeBenefitController extends AbstractController
                 5 => ['ndr-one-off'],
             ];
 
-            $this->getRestClient()->put('ndr/' . $ndrId, $data, $stepToJmsGroup[$step]);
+            $this->restClient->put('ndr/' . $ndrId, $data, $stepToJmsGroup[$step]);
 
             if ($fromPage == 'summary') {
                 $request->getSession()->getFlashBag()->add(

@@ -29,7 +29,7 @@ class ClientController extends AbstractController
      */
     public function detailsAction($id)
     {
-        $client = $this->getRestClient()->get('v2/client/' . $id, 'Client');
+        $client = $this->restClient->get('v2/client/' . $id, 'Client');
 
         return [
             'client'      => $client,
@@ -46,7 +46,7 @@ class ClientController extends AbstractController
      */
     public function detailsByCaseNumberAction($caseNumber)
     {
-        $client = $this->getRestClient()->get('v2/client/case-number/' . $caseNumber, 'Client');
+        $client = $this->restClient->get('v2/client/case-number/' . $caseNumber, 'Client');
 
         return $this->redirectToRoute('admin_client_details', ['id' => $client->getId()]);
     }
@@ -62,7 +62,7 @@ class ClientController extends AbstractController
      */
     public function dischargeAction($id)
     {
-        $client = $this->getRestClient()->get('v2/client/' . $id, 'Client');
+        $client = $this->restClient->get('v2/client/' . $id, 'Client');
 
         return [
             'client' => $client,
@@ -81,10 +81,10 @@ class ClientController extends AbstractController
     public function dischargeConfirmAction($id, Logger $logger, AuditEvents $auditEvents)
     {
         /** @var Client $client */
-        $client = $this->getRestClient()->get('v2/client/' . $id, 'Client');
+        $client = $this->restClient->get('v2/client/' . $id, 'Client');
         $deputy = $this->getNamedDeputy($client->getId(), $client);
 
-        $this->getRestClient()->delete('client/' . $id . '/delete');
+        $this->restClient->delete('client/' . $id . '/delete');
 
         $logger->notice('', $auditEvents->clientDischarged(
             AuditEvents::TRIGGER_ADMIN_BUTTON,
@@ -112,7 +112,7 @@ class ClientController extends AbstractController
             return null;
         }
 
-        $clientWithUsers = $this->getRestClient()->get('client/' . $id . '/details', 'Client');
+        $clientWithUsers = $this->restClient->get('client/' . $id . '/details', 'Client');
 
         foreach ($clientWithUsers->getUsers() as $user) {
             if ($user->isLayDeputy()) {

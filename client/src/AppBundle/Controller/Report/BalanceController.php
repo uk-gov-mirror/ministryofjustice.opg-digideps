@@ -47,7 +47,7 @@ class BalanceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $this->getRestClient()->put('report/' . $reportId, $data, ['balance_mismatch_explanation']);
+            $this->restClient->put('report/' . $reportId, $data, ['balance_mismatch_explanation']);
 
 //            $request->getSession()->getFlashBag()->add(
 //                'notice',

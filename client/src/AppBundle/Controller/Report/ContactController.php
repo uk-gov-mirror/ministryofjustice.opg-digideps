@@ -54,9 +54,9 @@ class ContactController extends AbstractController
                 case 'yes':
                     return $this->redirectToRoute('contacts_add', ['reportId' => $reportId, 'from'=>'exist']);
                 case 'no':
-                    $this->getRestClient()->put('report/' . $reportId, $report, ['reasonForNoContacts', 'contacts']);
+                    $this->restClient->put('report/' . $reportId, $report, ['reasonForNoContacts', 'contacts']);
                     foreach ($report->getContacts() as $contact) {
-                        $this->getRestClient()->delete('/report/contact/' . $contact->getId());
+                        $this->restClient->delete('/report/contact/' . $contact->getId());
                     }
                     return $this->redirectToRoute('contacts_summary', ['reportId' => $reportId]);
             }
@@ -91,7 +91,7 @@ class ContactController extends AbstractController
             $data->setReport($report);
 
             // update contact. The API will also delete reason for no contact
-                $this->getRestClient()->post('report/contact', $data, ['contact', 'report-id']);
+            $this->restClient->post('report/contact', $data, ['contact', 'report-id']);
 
             return $this->redirect($this->generateUrl('contacts_add_another', ['reportId' => $reportId]));
         }
@@ -139,7 +139,7 @@ class ContactController extends AbstractController
     public function editAction(Request $request, $reportId, $contactId)
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $contact = $this->getRestClient()->get('report/contact/' . $contactId, 'Report\\Contact');
+        $contact = $this->restClient->get('report/contact/' . $contactId, 'Report\\Contact');
         $contact->setReport($report);
 
         $form = $this->createForm(FormDir\Report\ContactType::class, $contact);
@@ -151,7 +151,7 @@ class ContactController extends AbstractController
 
             $request->getSession()->getFlashBag()->add('notice', 'Contact edited');
 
-            $this->getRestClient()->put('report/contact', $data);
+            $this->restClient->put('report/contact', $data);
             return $this->redirect($this->generateUrl('contacts', ['reportId' => $reportId]));
         }
 
@@ -197,7 +197,7 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->delete("/report/contact/{$contactId}");
+            $this->restClient->delete("/report/contact/{$contactId}");
 
             $request->getSession()->getFlashBag()->add(
                 'notice',
@@ -208,7 +208,7 @@ class ContactController extends AbstractController
         }
 
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $contact = $this->getRestClient()->get('report/contact/' . $contactId, 'Report\\Contact');
+        $contact = $this->restClient->get('report/contact/' . $contactId, 'Report\\Contact');
 
         return [
             'translationDomain' => 'report-contacts',

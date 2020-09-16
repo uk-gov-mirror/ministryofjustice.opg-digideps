@@ -53,9 +53,12 @@ class VisitsCareController extends AbstractController
             ->setCurrentStep($step)->setTotalSteps($totalSteps)
             ->setRouteBaseParams(['ndrId'=>$ndrId]);
 
-        $form = $this->createForm(FormDir\Ndr\VisitsCareType::class, $visitsCare, [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $ndr->getClient()->getFirstname()
+        $form = $this->createForm(
+            FormDir\Ndr\VisitsCareType::class,
+            $visitsCare,
+            [ 'step'            => $step, 'translator'      => $this->get('translator'), 'clientFirstName' => $ndr->getClient()->getFirstname()
                                    ]
-                                 );
+        );
         $form->handleRequest($request);
 
         if ($form->get('save')->isClicked() && $form->isSubmitted() && $form->isValid()) {
@@ -66,9 +69,9 @@ class VisitsCareController extends AbstractController
                 ->keepOnlyRelevantVisitsCareData();
 
             if ($visitsCare->getId() === null) {
-                $this->getRestClient()->post('/ndr/visits-care', $data, ['visits-care', 'ndr-id']);
+                $this->restClient->post('/ndr/visits-care', $data, ['visits-care', 'ndr-id']);
             } else {
-                $this->getRestClient()->put('/ndr/visits-care/' . $visitsCare->getId(), $data, ['visits-care', 'ndr-id']);
+                $this->restClient->put('/ndr/visits-care/' . $visitsCare->getId(), $data, ['visits-care', 'ndr-id']);
             }
 
             if ($fromPage == 'summary') {

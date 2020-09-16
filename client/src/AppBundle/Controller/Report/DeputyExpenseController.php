@@ -45,8 +45,11 @@ class DeputyExpenseController extends AbstractController
     public function existAction(Request $request, $reportId)
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $form = $this->createForm(FormDir\YesNoType::class, $report, [ 'field' => 'paidForAnything', 'translation_domain' => 'report-deputy-expenses']
-                                 );
+        $form = $this->createForm(
+            FormDir\YesNoType::class,
+            $report,
+            [ 'field' => 'paidForAnything', 'translation_domain' => 'report-deputy-expenses']
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,7 +59,7 @@ class DeputyExpenseController extends AbstractController
                 case 'yes':
                     return $this->redirectToRoute('deputy_expenses_add', ['reportId' => $reportId, 'from'=>'exist']);
                 case 'no':
-                    $this->getRestClient()->put('report/' . $reportId, $data, ['expenses-paid-anything']);
+                    $this->restClient->put('report/' . $reportId, $data, ['expenses-paid-anything']);
                     return $this->redirectToRoute('deputy_expenses_summary', ['reportId' => $reportId]);
             }
         }
@@ -96,7 +99,7 @@ class DeputyExpenseController extends AbstractController
             $data = $form->getData();
             $data->setReport($report);
 
-            $this->getRestClient()->post('report/' . $report->getId() . '/expense', $data, ['expenses', 'account']);
+            $this->restClient->post('report/' . $report->getId() . '/expense', $data, ['expenses', 'account']);
 
             return $this->redirect($this->generateUrl('deputy_expenses_add_another', ['reportId' => $reportId]));
         }
@@ -144,7 +147,7 @@ class DeputyExpenseController extends AbstractController
     public function editAction(Request $request, $reportId, $expenseId)
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $expense = $this->getRestClient()->get(
+        $expense = $this->restClient->get(
             'report/' . $report->getId() . '/expense/' . $expenseId,
             'Report\Expense',
             [
@@ -172,7 +175,7 @@ class DeputyExpenseController extends AbstractController
             $data = $form->getData();
             $request->getSession()->getFlashBag()->add('notice', 'Expense edited');
 
-            $this->getRestClient()->put(
+            $this->restClient->put(
                 'report/' . $report->getId() . '/expense/' . $expense->getId(),
                 $data,
                 [
@@ -227,7 +230,7 @@ class DeputyExpenseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->delete('report/' . $report->getId() . '/expense/' . $expenseId);
+            $this->restClient->delete('report/' . $report->getId() . '/expense/' . $expenseId);
 
             $request->getSession()->getFlashBag()->add(
                 'notice',
@@ -237,7 +240,7 @@ class DeputyExpenseController extends AbstractController
             return $this->redirect($this->generateUrl('deputy_expenses', ['reportId' => $reportId]));
         }
 
-        $expense = $this->getRestClient()->get('report/' . $reportId . '/expense/' . $expenseId, 'Report\Expense');
+        $expense = $this->restClient->get('report/' . $reportId . '/expense/' . $expenseId, 'Report\Expense');
 
         return [
             'translationDomain' => 'report-deputy-expenses',

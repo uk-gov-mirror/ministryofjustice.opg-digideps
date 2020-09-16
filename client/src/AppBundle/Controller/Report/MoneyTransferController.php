@@ -62,12 +62,11 @@ class MoneyTransferController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             switch ($report->getNoTransfersToAdd()) {
                 case 0:
                     return $this->redirectToRoute('money_transfers_step', ['reportId' => $reportId, 'step' => 1]);
                 case 1:
-                    $this->getRestClient()->put('report/' . $reportId, $report, ['money-transfers-no-transfers']);
+                    $this->restClient->put('report/' . $reportId, $report, ['money-transfers-no-transfers']);
                     return $this->redirectToRoute('money_transfers_summary', ['reportId' => $reportId]);
             }
         }
@@ -150,11 +149,11 @@ class MoneyTransferController extends AbstractController
                         'notice',
                         'Entry edited'
                     );
-                    $this->getRestClient()->put('/report/' . $reportId . '/money-transfers/' . $transferId, $transfer, ['money-transfer']);
+                    $this->restClient->put('/report/' . $reportId . '/money-transfers/' . $transferId, $transfer, ['money-transfer']);
 
                     return $this->redirectToRoute('money_transfers_summary', ['reportId' => $reportId]);
                 } else { // add
-                    $this->getRestClient()->post('/report/' . $reportId . '/money-transfers', $transfer, ['money-transfer']);
+                    $this->restClient->post('/report/' . $reportId . '/money-transfers', $transfer, ['money-transfer']);
                     return $this->redirectToRoute('money_transfers_add_another', ['reportId' => $reportId]);
                 }
             }
@@ -240,7 +239,7 @@ class MoneyTransferController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->delete("/report/{$reportId}/money-transfers/{$transferId}");
+            $this->restClient->delete("/report/{$reportId}/money-transfers/{$transferId}");
 
             $this->addFlash(
                 'notice',

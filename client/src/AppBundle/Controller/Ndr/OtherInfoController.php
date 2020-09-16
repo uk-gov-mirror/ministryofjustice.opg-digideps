@@ -57,7 +57,7 @@ class OtherInfoController extends AbstractController
 
         if ($form->get('save')->isClicked() && $form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $this->getRestClient()->put('ndr/' . $ndrId, $data, ['more-info']);
+            $this->restClient->put('ndr/' . $ndrId, $data, ['more-info']);
 
             if ($fromPage == 'summary') {
                 $request->getSession()->getFlashBag()->add(

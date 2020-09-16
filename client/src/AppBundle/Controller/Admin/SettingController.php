@@ -22,7 +22,7 @@ class SettingController extends AbstractController
     public function serviceNotificationAction(Request $request)
     {
         $endpoint = 'setting/service-notification';
-        $setting = $this->getRestClient()->get($endpoint, 'Setting');
+        $setting = $this->restClient->get($endpoint, 'Setting');
         $form = $this->createForm(
             FormDir\Admin\SettingType::class,
             $setting
@@ -33,7 +33,7 @@ class SettingController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $setting = $form->getData();
 
-            $this->getRestClient()->put($endpoint, $setting, ['setting']);
+            $this->restClient->put($endpoint, $setting, ['setting']);
             $request->getSession()->getFlashBag()->add(
                 'notice',
                 'The setting has been saved'

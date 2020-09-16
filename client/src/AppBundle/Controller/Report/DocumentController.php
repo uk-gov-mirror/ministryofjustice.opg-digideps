@@ -101,7 +101,7 @@ class DocumentController extends AbstractController
 
                     $this->addFlash('error', $translatedMessage);
                 } else {
-                    $this->getRestClient()->put('report/' . $reportId, $data, ['report','wish-to-provide-documentation']);
+                    $this->restClient->put('report/' . $reportId, $data, ['report','wish-to-provide-documentation']);
                 }
             }
 
@@ -366,7 +366,7 @@ class DocumentController extends AbstractController
         $report = $this->getReport($reportId, self::$jmsGroups);
 
         // submit the report to generate the submission entry only
-        $this->getRestClient()->put('report/' . $report->getId() . '/submit-documents', $report, ['submit']);
+        $this->restClient->put('report/' . $report->getId() . '/submit-documents', $report, ['submit']);
 
         $this->addFlash('notice', 'The documents attached for your ' . $report->getPeriod() . ' report have been sent to OPG');
 
@@ -388,7 +388,7 @@ class DocumentController extends AbstractController
      */
     private function getDocument(string $documentId)
     {
-        return $this->getRestClient()->get(
+        return $this->restClient->get(
             'document/' . $documentId,
             'Report\Document',
             ['documents', 'status', 'document-storage-reference', 'document-report-submission', 'document-report', 'report', 'report-client', 'client', 'client-users', 'user-id', 'client-organisations']

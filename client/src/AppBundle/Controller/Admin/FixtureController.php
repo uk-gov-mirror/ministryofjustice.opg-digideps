@@ -72,7 +72,7 @@ class FixtureController extends AbstractController
             $deputyEmail = $request->query->get('deputy-email', sprintf('original-%s-deputy-%s@fixture.com', strtolower($submitted['deputyType']), mt_rand(1000, 9999)));
             $caseNumber = $request->get('case-number', $this->generateValidCaseNumber());
 
-            $response = $this->getRestClient()->post('v2/fixture/court-order', json_encode([
+            $response = $this->restClient->post('v2/fixture/court-order', json_encode([
                 'deputyType' => $submitted['deputyType'],
                 'deputyEmail' => $deputyEmail,
                 'caseNumber' =>  $caseNumber,
@@ -84,7 +84,7 @@ class FixtureController extends AbstractController
             ]));
 
             $query = ['query' => ['filter_by_ids' => implode(",", $response['deputyIds'])]];
-            $deputiesData = $this->getRestClient()->get('/user/get-all', 'array', [], $query);
+            $deputiesData = $this->restClient->get('/user/get-all', 'array', [], $query);
             $sanitizedDeputyData = $this->removeNullValues($deputiesData);
 
             $deputies = $this->serializer->deserialize(json_encode($sanitizedDeputyData), 'AppBundle\Entity\User[]', 'json');
@@ -253,8 +253,10 @@ class FixtureController extends AbstractController
         try {
             $this
                 ->getRestClient()
-                ->post("v2/fixture/createClientAttachDeputy",
-                    json_encode([
+                ->post(
+                    "v2/fixture/createClientAttachDeputy",
+                    json_encode(
+                        [
                         "firstName" => $request->query->get('firstName'),
                         "lastName" => $request->query->get('lastName'),
                         "phone" => $request->query->get('phone'),
@@ -266,7 +268,7 @@ class FixtureController extends AbstractController
                         "deputyEmail" => $request->query->get('deputyEmail')]
                     )
                 );
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
 
@@ -311,7 +313,7 @@ class FixtureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $submitted = $form->getData();
 
-            $response = $this->getRestClient()->post('v2/fixture/createCasrec', json_encode([
+            $response = $this->restClient->post('v2/fixture/createCasrec', json_encode([
                 'deputyType' => $submitted['deputyType'],
                 'reportType' => $submitted['reportType'],
                 'createCoDeputy' => $submitted['createCoDeputy'],

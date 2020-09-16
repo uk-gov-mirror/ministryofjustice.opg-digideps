@@ -27,7 +27,7 @@ class NoteController extends AbstractController
         $clientId = $request->get('clientId');
 
         /** @var $client EntityDir\Client */
-        $client = $this->getRestClient()->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report', 'client-users', 'user']);
+        $client = $this->restClient->get('client/' . $clientId, 'Client', ['client', 'report-id', 'current-report', 'client-users', 'user']);
 
         $this->denyAccessUnlessGranted('add-note', $client, 'Access denied');
 
@@ -46,7 +46,7 @@ class NoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $note = $form->getData();
 
-            $this->getRestClient()->post('note/' . $client->getId(), $note, ['add_note']);
+            $this->restClient->post('note/' . $client->getId(), $note, ['add_note']);
             $request->getSession()->getFlashBag()->add('notice', 'The note has been added');
 
             return $this->redirect($this->generateClientProfileLink($note->getClient()));
@@ -81,7 +81,7 @@ class NoteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $note = $form->getData();
 
-            $this->getRestClient()->put('note/' . $noteId, $note, ['add_note']);
+            $this->restClient->put('note/' . $noteId, $note, ['add_note']);
             $request->getSession()->getFlashBag()->add(
                 'notice',
                 'The note has been edited'
@@ -121,7 +121,7 @@ class NoteController extends AbstractController
 
                 $this->denyAccessUnlessGranted('delete-note', $note, 'Access denied');
 
-                $this->getRestClient()->delete('note/' . $noteId);
+                $this->restClient->delete('note/' . $noteId);
 
                 $request->getSession()->getFlashBag()->add('notice', 'Note has been removed');
             } catch (\Throwable $e) {
@@ -153,7 +153,7 @@ class NoteController extends AbstractController
      */
     private function getNote($noteId)
     {
-        return $this->getRestClient()->get(
+        return $this->restClient->get(
             'note/' . $noteId,
             'Note',
             ['notes', 'client', 'client-users', 'current-report', 'report-id', 'note-client', 'user']

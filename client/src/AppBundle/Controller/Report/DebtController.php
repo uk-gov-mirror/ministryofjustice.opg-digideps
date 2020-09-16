@@ -41,12 +41,15 @@ class DebtController extends AbstractController
     public function existAction(Request $request, $reportId)
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$jmsGroups);
-        $form = $this->createForm(FormDir\YesNoType::class, $report, [ 'field' => 'hasDebts', 'translation_domain' => 'report-debts']
-                                 );
+        $form = $this->createForm(
+            FormDir\YesNoType::class,
+            $report,
+            [ 'field' => 'hasDebts', 'translation_domain' => 'report-debts']
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->put('report/' . $reportId, $report, ['debt']);
+            $this->restClient->put('report/' . $reportId, $report, ['debt']);
 
             if ($report->getHasDebts() == 'yes') {
                 return $this->redirectToRoute('debts_edit', ['reportId' => $reportId]);
@@ -81,7 +84,7 @@ class DebtController extends AbstractController
         $fromPage = $request->get('from');
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->put('report/' . $report->getId(), $form->getData(), ['debt']);
+            $this->restClient->put('report/' . $report->getId(), $form->getData(), ['debt']);
 
             if ($fromPage == 'summary') {
                 if (empty($report->getDebtManagement())) {
@@ -121,7 +124,7 @@ class DebtController extends AbstractController
         $fromSummaryPage = $request->get('from') == 'summary';
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->put('report/' . $report->getId(), $form->getData(), ['debt-management']);
+            $this->restClient->put('report/' . $report->getId(), $form->getData(), ['debt-management']);
 
             if ($fromPage == 'summary') {
                 $request->getSession()->getFlashBag()->add('notice', 'Answer edited');

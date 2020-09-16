@@ -52,9 +52,9 @@ class CoDeputyController extends AbstractController
 
                 // validate against casRec
                 try {
-                    $this->getRestClient()->apiCall('post', 'selfregister/verifycodeputy', $selfRegisterData, 'array', [], false);
+                    $this->restClient->apiCall('post', 'selfregister/verifycodeputy', $selfRegisterData, 'array', [], false);
                     $user->setCoDeputyClientConfirmed(true);
-                    $this->getRestClient()->put('user/' . $user->getId(), $user);
+                    $this->restClient->put('user/' . $user->getId(), $user);
                     return $this->redirect($this->generateUrl('homepage'));
                 } catch (\Throwable $e) {
                     $translator = $this->get('translator');
@@ -64,7 +64,8 @@ class CoDeputyController extends AbstractController
                                 $translator->trans('email.first.existingError', [
                                     '%login%' => $this->generateUrl('login'),
                                     '%passwordForgotten%' => $this->generateUrl('password_forgotten')
-                                ], 'register')));
+                                ], 'register')
+                            ));
                             break;
 
                         case 421:
@@ -120,10 +121,10 @@ class CoDeputyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 /** @var EntityDir\User $invitedUser */
-                $invitedUser = $this->getRestClient()->post('codeputy/add', $form->getData(), ['codeputy'], 'User');
+                $invitedUser = $this->restClient->post('codeputy/add', $form->getData(), ['codeputy'], 'User');
 
                 // Regular deputies should become coDeputies via a CSV import, but at least for testing handle the change from non co-dep to co-dep here
-                $this->getRestClient()->put('user/' . $loggedInUser->getId(), ['co_deputy_client_confirmed' => true], []);
+                $this->restClient->put('user/' . $loggedInUser->getId(), ['co_deputy_client_confirmed' => true], []);
 
                 $invitationEmail = $this->getMailFactory()->createInvitationEmail($invitedUser, $loggedInUser->getFullName());
                 $this->getMailSender()->send($invitationEmail);
@@ -158,7 +159,7 @@ class CoDeputyController extends AbstractController
     public function resendActivationAction(Request $request, $email)
     {
         $loggedInUser = $this->getUserWithData(['user-clients', 'client']);
-        $invitedUser = $this->getRestClient()->userRecreateToken($email, 'pass-reset');
+        $invitedUser = $this->restClient->userRecreateToken($email, 'pass-reset');
 
         $form = $this->createForm(FormDir\CoDeputyInviteType::class, $invitedUser);
 
@@ -171,7 +172,7 @@ class CoDeputyController extends AbstractController
             try {
                 //email was updated on the fly
                 if ($form->getData()->getEmail() != $email) {
-                    $this->getRestClient()->put('codeputy/' . $invitedUser->getId(), $form->getData(), []);
+                    $this->restClient->put('codeputy/' . $invitedUser->getId(), $form->getData(), []);
                 }
                 $invitationEmail = $this->getMailFactory()->createInvitationEmail($invitedUser, $loggedInUser->getFullName());
                 $this->getMailSender()->send($invitationEmail);

@@ -118,7 +118,7 @@ class ProfDeputyCostsEstimateController extends AbstractController
         }
 
         return [
-            'backLink' =>$this->generateUrl( $from === 'summary' ? 'prof_deputy_costs_estimate_summary' : 'prof_deputy_costs_estimate_how_charged', ['reportId'=>$reportId]),
+            'backLink' =>$this->generateUrl($from === 'summary' ? 'prof_deputy_costs_estimate_summary' : 'prof_deputy_costs_estimate_how_charged', ['reportId'=>$reportId]),
             'form' => $form->createView(),
             'report' => $report,
         ];
@@ -147,7 +147,7 @@ class ProfDeputyCostsEstimateController extends AbstractController
         }
 
         return [
-            'backLink' =>$this->generateUrl( $from === 'summary' ? 'prof_deputy_costs_estimate_summary' : 'prof_deputy_costs_estimate_breakdown', ['reportId'=>$reportId]),
+            'backLink' =>$this->generateUrl($from === 'summary' ? 'prof_deputy_costs_estimate_summary' : 'prof_deputy_costs_estimate_breakdown', ['reportId'=>$reportId]),
             'form' => $form->createView(),
             'report' => $report,
         ];
@@ -198,7 +198,6 @@ class ProfDeputyCostsEstimateController extends AbstractController
                 $defaultEstimateCostType['hasMoreDetails'],
                 null
             );
-
         }
         return $estimateCosts;
     }
@@ -210,7 +209,7 @@ class ProfDeputyCostsEstimateController extends AbstractController
      */
     private function persistUpdate($id, Report $report, array $groups)
     {
-        $this->getRestClient()->put('report/' . $id, $report, $groups);
+        $this->restClient->put('report/' . $id, $report, $groups);
     }
 
     /**

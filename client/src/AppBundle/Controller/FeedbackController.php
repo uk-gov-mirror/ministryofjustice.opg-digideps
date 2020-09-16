@@ -26,7 +26,7 @@ class FeedbackController extends AbstractController
             $comments = $form->get('comments')->getData();
 
             if ($score) {
-                $this->getRestClient()->post('satisfaction/public', [
+                $this->restClient->post('satisfaction/public', [
                     'score' => $score,
                     'comments' => $comments,
                 ]);

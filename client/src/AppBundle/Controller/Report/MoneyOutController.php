@@ -85,7 +85,10 @@ class MoneyOutController extends AbstractController
         ]);
 
         // crete and handle form
-        $form = $this->createForm(FormDir\Report\MoneyTransactionType::class, $transaction, [
+        $form = $this->createForm(
+            FormDir\Report\MoneyTransactionType::class,
+            $transaction,
+            [
             'step' => $step,
             'type'             => 'out',
             'selectedCategory' => $transaction->getCategory(),
@@ -110,10 +113,10 @@ class MoneyOutController extends AbstractController
                         'notice',
                         'Entry edited'
                     );
-                    $this->getRestClient()->put('/report/' . $reportId . '/money-transaction/' . $transactionId, $transaction, ['transaction', 'account']);
+                    $this->restClient->put('/report/' . $reportId . '/money-transaction/' . $transactionId, $transaction, ['transaction', 'account']);
                     return $this->redirectToRoute('money_out_summary', ['reportId' => $reportId]);
                 } else { // add
-                    $this->getRestClient()->post('/report/' . $reportId . '/money-transaction', $transaction, ['transaction', 'account']);
+                    $this->restClient->post('/report/' . $reportId . '/money-transaction', $transaction, ['transaction', 'account']);
                     return $this->redirectToRoute('money_out_add_another', ['reportId' => $reportId]);
                 }
             }
@@ -211,7 +214,7 @@ class MoneyOutController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getRestClient()->delete('/report/' . $reportId . '/money-transaction/' . $transactionId);
+            $this->restClient->delete('/report/' . $reportId . '/money-transaction/' . $transactionId);
 
             $this->addFlash(
                 'notice',

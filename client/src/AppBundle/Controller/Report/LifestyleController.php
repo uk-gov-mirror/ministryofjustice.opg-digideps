@@ -66,9 +66,9 @@ class LifestyleController extends AbstractController
                 ->keepOnlyRelevantLifestyleData();
 
             if ($lifestyle->getId() == null) {
-                $this->getRestClient()->post('report/lifestyle', $data, ['lifestyle', 'report-id']);
+                $this->restClient->post('report/lifestyle', $data, ['lifestyle', 'report-id']);
             } else {
-                $this->getRestClient()->put('report/lifestyle/' . $lifestyle->getId(), $data, self::$jmsGroups);
+                $this->restClient->put('report/lifestyle/' . $lifestyle->getId(), $data, self::$jmsGroups);
             }
 
             if ($fromPage == 'summary') {

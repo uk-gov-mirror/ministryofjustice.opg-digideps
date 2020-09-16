@@ -127,7 +127,7 @@ class IndexController extends AbstractController
             ], 'signin');
         }
 
-        $snSetting = $this->getRestClient()->get('setting/service-notification', 'Setting', [], ['addAuthToken'=>false]);
+        $snSetting = $this->restClient->get('setting/service-notification', 'Setting', [], ['addAuthToken'=>false]);
 
         return $this->render('AppBundle:Index:login.html.twig', [
                 'form' => $form->createView(),
@@ -274,7 +274,7 @@ class IndexController extends AbstractController
         if ($request->cookies->has('cookie_policy')) {
             $policy = json_decode($request->cookies->get('cookie_policy'));
             $form->get('usage')->setData($policy->usage);
-        } else if ($request->query->get('accept') === 'all') {
+        } elseif ($request->query->get('accept') === 'all') {
             $form->get('usage')->setData(true);
         }
 
