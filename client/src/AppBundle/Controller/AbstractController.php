@@ -26,33 +26,23 @@ abstract class AbstractController extends Controller
     /**
      * @var LoggerInterface
      */
-    public $logger;
+    protected $logger;
 
     /**
      * @var RestClient
      */
-    public $restClient;
+    protected $restClient;
 
     /**
      * @var TranslatorInterface
      */
-    public $translator;
+    protected $translator;
 
     public function __construct(LoggerInterface $logger, RestClient $restClient, TranslatorInterface $translator)
     {
         $this->logger = $logger;
         $this->restClient = $restClient;
         $this->translator = $translator;
-    }
-
-    /**
-     * @return RestClient
-     */
-    protected function getRestClient()
-    {
-        /** @var RestClient */
-        $restClient = $this->get('rest_client');
-        return $restClient;
     }
 
     /**
@@ -298,10 +288,8 @@ abstract class AbstractController extends Controller
             return $this->generateUrl('report_overview', ['reportId' => $report->getId()]);
         }
 
-        /** @var LoggerInterface */
-        $logger = $this->get('logger');
 
-        $logger->log(
+        $this->logger->log(
             'warning',
             'Client entity missing current report when trying to generate client profile link'
         );

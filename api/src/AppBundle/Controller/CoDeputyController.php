@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -6,6 +6,7 @@ use AppBundle\Entity as EntityDir;
 use AppBundle\Entity\User;
 use AppBundle\Service\CsvUploader;
 use AppBundle\Service\UserService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,15 +16,20 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CoDeputyController extends RestController
 {
-
     /**
      * @var UserService
      */
     private $userService;
 
-    public function __construct(UserService $userService)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(UserService $userService, LoggerInterface $logger)
     {
         $this->userService = $userService;
+        $this->logger = $logger;
     }
 
     /**
@@ -133,7 +139,7 @@ class CoDeputyController extends RestController
             $affected += $conn->exec($sql);
         }
 
-        $this->get('logger')->info('Received ' . count($data) . ' records, of which ' . $affected . ' were updated');
+        $this->logger->info('Received ' . count($data) . ' records, of which ' . $affected . ' were updated');
         return ['requested_mld_upgrades' => count($deputyNumbers), 'updated' => $affected, 'errors' => $retErrors];
     }
 }

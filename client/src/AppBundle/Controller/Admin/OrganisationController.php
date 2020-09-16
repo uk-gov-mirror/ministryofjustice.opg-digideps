@@ -141,7 +141,7 @@ class OrganisationController extends AbstractController
                 $this->restClient->delete('v2/organisation/' . $organisation->getId());
                 $request->getSession()->getFlashBag()->add('notice', 'The organisation has been removed');
             } catch (\Throwable $e) {
-                $this->get('logger')->error($e->getMessage());
+                $this->logger->error($e->getMessage());
                 $request->getSession()->getFlashBag()->add('error', 'Organisation could not be removed');
             }
 
@@ -235,7 +235,7 @@ class OrganisationController extends AbstractController
                 $this->restClient->delete('v2/organisation/' . $organisation->getId() . '/user/' . $user->getId());
                 $request->getSession()->getFlashBag()->add('notice', 'User has been removed from ' . $organisation->getName());
             } catch (\Throwable $e) {
-                $this->get('logger')->error($e->getMessage());
+                $this->logger->error($e->getMessage());
                 $request->getSession()->getFlashBag()->add('error', 'User could not be removed form '  . $organisation->getName());
             }
 

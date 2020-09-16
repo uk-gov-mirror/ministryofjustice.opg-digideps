@@ -36,9 +36,9 @@ class SelfRegisterController extends RestController
 
         try {
             $user = $userRegistrationService->selfRegisterUser($selfRegisterData);
-            $this->get('logger')->warning('CasRec register success: ', ['extra' => ['page' => 'user_registration', 'success' => true] + $selfRegisterData->toArray()]);
+            $this->logger->warning('CasRec register success: ', ['extra' => ['page' => 'user_registration', 'success' => true] + $selfRegisterData->toArray()]);
         } catch (\Throwable $e) {
-            $this->get('logger')->warning('CasRec register failed:', ['extra' => ['page' => 'user_registration', 'success' => false] + $selfRegisterData->toArray()]);
+            $this->logger->warning('CasRec register failed:', ['extra' => ['page' => 'user_registration', 'success' => false] + $selfRegisterData->toArray()]);
             throw $e;
         }
 
@@ -70,9 +70,9 @@ class SelfRegisterController extends RestController
 
         try {
             $coDeputyVerified = $userRegistrationService->validateCoDeputy($selfRegisterData);
-            $this->get('logger')->warning('CasRec codeputy validation success: ', ['extra' => ['page' => 'codep_validation', 'success' => true] + $selfRegisterData->toArray()]);
+            $this->logger->warning('CasRec codeputy validation success: ', ['extra' => ['page' => 'codep_validation', 'success' => true] + $selfRegisterData->toArray()]);
         } catch (\Throwable $e) {
-            $this->get('logger')->warning('CasRec codeputy validation failed:', ['extra' => ['page' => 'codep_validation', 'success' => false] + $selfRegisterData->toArray()]);
+            $this->logger->warning('CasRec codeputy validation failed:', ['extra' => ['page' => 'codep_validation', 'success' => false] + $selfRegisterData->toArray()]);
             throw $e;
         }
 

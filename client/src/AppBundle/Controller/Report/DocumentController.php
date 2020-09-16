@@ -95,9 +95,7 @@ class DocumentController extends AbstractController
 
             if ('no' === $data->getWishToProvideDocumentation()) {
                 if (count($data->getDeputyDocuments()) > 0) {
-                    /** @var TranslatorInterface $translator */
-                    $translator = $this->get('translator');
-                    $translatedMessage = $translator->trans('summaryPage.setNoAttemptWithDocuments', [], 'report-documents');
+                    $translatedMessage = $this->translator->trans('summaryPage.setNoAttemptWithDocuments', [], 'report-documents');
 
                     $this->addFlash('error', $translatedMessage);
                 } else {
@@ -304,9 +302,7 @@ class DocumentController extends AbstractController
                 $this->addFlash('notice', 'Document has been removed');
             }
         } catch (\Throwable $e) {
-            /** @var LoggerInterface $logger */
-            $logger = $this->get('logger');
-            $logger->error($e->getMessage());
+            $this->logger->error($e->getMessage());
 
             $this->addFlash(
                 'error',

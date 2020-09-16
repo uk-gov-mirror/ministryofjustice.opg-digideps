@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -9,6 +10,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ManageController extends RestController
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @Route("/availability", methods={"GET"})
      */
@@ -53,7 +64,7 @@ class ManageController extends RestController
             }
 
             // log real error message
-            $this->get('logger')->error($e->getMessage());
+            $this->logger->error($e->getMessage());
 
             return [false, $returnMessage];
         }

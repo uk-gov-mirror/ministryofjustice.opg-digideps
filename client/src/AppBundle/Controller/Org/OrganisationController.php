@@ -29,10 +29,9 @@ class OrganisationController extends AbstractController
     /** @var Logger */
     private $logger;
 
-    public function __construct(DateTimeProvider $dateTimeProvider, Logger $logger)
+    public function __construct(DateTimeProvider $dateTimeProvider)
     {
         $this->dateTimeProvider = $dateTimeProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -259,9 +258,7 @@ class OrganisationController extends AbstractController
 
                 $this->addFlash('notice', 'User account removed from organisation');
             } catch (\Throwable $e) {
-                /** @var LoggerInterface */
-                $logger = $this->get('logger');
-                $logger->debug($e->getMessage());
+                $this->logger->debug($e->getMessage());
 
                 if ($e instanceof RestClientException && isset($e->getData()['message'])) {
                     $this->addFlash(
@@ -311,7 +308,7 @@ class OrganisationController extends AbstractController
             );
         } catch (\Throwable $e) {
             /** @var LoggerInterface */
-            $logger = $this->get('logger');
+            $logger = $this->logger;
             $logger->debug($e->getMessage());
 
             $this->addFlash(

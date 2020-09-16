@@ -214,7 +214,7 @@ class UserController extends AbstractController
     public function passwordForgottenAction(Request $request)
     {
         /** @var LoggerInterface */
-        $logger = $this->get('logger');
+        $logger = $this->logger;
 
         $user = new EntityDir\User();
         $form = $this->createForm(FormDir\PasswordForgottenType::class, $user);
@@ -322,7 +322,7 @@ class UserController extends AbstractController
                 }
 
                 /** @var LoggerInterface */
-                $logger = $this->get('logger');
+                $logger = $this->logger;
                 $logger->error(__METHOD__ . ': ' . $e->getMessage() . ', code: ' . $e->getCode());
             }
         }

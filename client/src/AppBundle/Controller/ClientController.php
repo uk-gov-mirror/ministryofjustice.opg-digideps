@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -137,22 +137,16 @@ class ClientController extends AbstractController
                     : $this->generateUrl('report_create', ['clientId' => $response['id']]);
                 return $this->redirect($url);
             } catch (\Throwable $e) {
-                /** @var TranslatorInterface $translator */
-                $translator = $this->get('translator');
-
-                /** @var LoggerInterface $logger */
-                $logger = $this->get('logger');
-
                 switch ((int) $e->getCode()) {
                     case 400:
-                        $form->addError(new FormError($translator->trans('formErrors.matching', [], 'register')));
+                        $form->addError(new FormError($this->translator->trans('formErrors.matching', [], 'register')));
                         break;
 
                     default:
-                        $form->addError(new FormError($translator->trans('formErrors.generic', [], 'register')));
+                        $form->addError(new FormError($this->translator->trans('formErrors.generic', [], 'register')));
                 }
 
-                $logger->error(__METHOD__ . ': ' . $e->getMessage() . ', code: ' . $e->getCode());
+                $this->logger->error(__METHOD__ . ': ' . $e->getMessage() . ', code: ' . $e->getCode());
             }
         }
 
