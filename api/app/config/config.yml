@@ -3,6 +3,9 @@ imports:
     - { resource: services.yml }
     - { resource: security.yml }
 
+parameters:
+    container.autowiring.strict_mode: true
+
 framework:
     #esi:             ~
     translator:

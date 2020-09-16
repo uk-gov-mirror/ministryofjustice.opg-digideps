@@ -78,6 +78,7 @@ parameters:
         - vehicles
         - assets_held_outside_england_and_wales
         - other_assets
+    container.autowiring.strict_mode: true
 
 services:
     # Logtash formatter for Kibana
