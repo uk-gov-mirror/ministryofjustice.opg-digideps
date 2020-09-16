@@ -41,17 +41,13 @@ class IndexController extends AbstractController
     /** @var UserVoter */
     private $userVoter;
 
-    /** @var Logger */
-    private $logger;
-
     /** @var DateTimeProvider */
     private $dateTimeProvider;
 
-    public function __construct(OrgService $orgService, UserVoter $userVoter, Logger $logger, DateTimeProvider $dateTimeProvider)
+    public function __construct(OrgService $orgService, UserVoter $userVoter, DateTimeProvider $dateTimeProvider)
     {
         $this->orgService = $orgService;
         $this->userVoter = $userVoter;
-        $this->logger = $logger;
         $this->dateTimeProvider = $dateTimeProvider;
     }
 

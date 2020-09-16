@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -26,26 +26,16 @@ class SettingsController extends AbstractController
     /** @var MailSender */
     private $mailSender;
 
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var Logger */
-    private $logger;
-
     /** @var DateTimeProvider */
     private $dateTimeProvider;
 
     public function __construct(
         MailFactory $mailFactory,
         MailSender $mailSender,
-        TranslatorInterface $translator,
-        Logger $logger,
         DateTimeProvider $dateTimeProvider
     ) {
         $this->mailFactory = $mailFactory;
         $this->mailSender = $mailSender;
-        $this->translator = $translator;
-        $this->logger = $logger;
         $this->dateTimeProvider = $dateTimeProvider;
     }
 

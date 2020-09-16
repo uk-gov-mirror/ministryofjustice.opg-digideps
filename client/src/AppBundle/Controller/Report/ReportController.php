@@ -89,15 +89,9 @@ class ReportController extends AbstractController
      */
     private $formFactory;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(FormFactoryInterface $formFactory, TranslatorInterface $translator)
+    public function __construct(FormFactoryInterface $formFactory)
     {
         $this->formFactory = $formFactory;
-        $this->translator = $translator;
     }
 
     /**

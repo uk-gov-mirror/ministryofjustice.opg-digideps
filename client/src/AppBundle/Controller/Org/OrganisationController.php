@@ -26,9 +26,6 @@ class OrganisationController extends AbstractController
     /** @var DateTimeProvider */
     private $dateTimeProvider;
 
-    /** @var Logger */
-    private $logger;
-
     public function __construct(DateTimeProvider $dateTimeProvider)
     {
         $this->dateTimeProvider = $dateTimeProvider;

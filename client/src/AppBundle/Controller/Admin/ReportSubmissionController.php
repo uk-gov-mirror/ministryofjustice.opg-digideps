@@ -36,16 +36,10 @@ class ReportSubmissionController extends AbstractController
      */
     private $s3Storage;
 
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(DocumentDownloader $documentDownloader, S3Storage $s3Storage, TranslatorInterface $translator)
+    public function __construct(DocumentDownloader $documentDownloader, S3Storage $s3Storage)
     {
         $this->documentDownloader = $documentDownloader;
         $this->s3Storage = $s3Storage;
-        $this->translator = $translator;
     }
 
     /**

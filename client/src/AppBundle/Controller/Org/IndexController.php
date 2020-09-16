@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller\Org;
 
@@ -23,15 +23,11 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class IndexController extends AbstractController
 {
-    /** @var Logger */
-    private $logger;
-
     /** @var DateTimeProvider */
     private $dateTimeProvider;
 
-    public function __construct(Logger $logger, DateTimeProvider $dateTimeProvider)
+    public function __construct(DateTimeProvider $dateTimeProvider)
     {
-        $this->logger = $logger;
         $this->dateTimeProvider = $dateTimeProvider;
     }
 

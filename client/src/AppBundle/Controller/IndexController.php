@@ -37,20 +37,15 @@ class IndexController extends AbstractController
     private $tokenStorage;
 
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
      * @var string
      */
     private $environment;
 
-    public function __construct(DeputyProvider $deputyProvider, EventDispatcherInterface $eventDispatcher, TokenStorageInterface $tokenStorage, TranslatorInterface $translator, string $environment)
+    public function __construct(DeputyProvider $deputyProvider, EventDispatcherInterface $eventDispatcher, TokenStorageInterface $tokenStorage, string $environment)
     {
         $this->deputyProvider = $deputyProvider;
         $this->eventDispatcher = $eventDispatcher;
         $this->tokenStorage = $tokenStorage;
-        $this->translator = $translator;
         $this->environment = $environment;
     }
 
