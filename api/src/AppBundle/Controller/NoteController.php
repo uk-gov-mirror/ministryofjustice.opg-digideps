@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
 use AppBundle\Entity as EntityDir;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class NoteController extends RestController
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @Route("{clientId}", requirements={"clientId":"\d+"}, methods={"POST"})
      * @Security("has_role('ROLE_ORG')")
@@ -106,7 +117,7 @@ class NoteController extends RestController
 
             $this->getEntityManager()->flush($note);
         } catch (\Throwable $e) {
-            $this->get('logger')->error('Failed to delete note ID: ' . $id . ' - ' . $e->getMessage());
+            $this->logger->error('Failed to delete note ID: ' . $id . ' - ' . $e->getMessage());
         }
 
         return [];
