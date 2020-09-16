@@ -6,6 +6,8 @@ use AppBundle\Controller\AbstractController;
 use AppBundle\Entity as EntityDir;
 use AppBundle\Exception\RestClientException;
 use AppBundle\Form as FormDir;
+use AppBundle\Service\Client\RestClient;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormError;
@@ -103,7 +105,7 @@ class TeamController extends AbstractController
             } catch (\Throwable $e) {
                 switch ((int) $e->getCode()) {
                     case 422:
-                        $form->get('email')->addError(new FormError($this->get('translator')->trans('form.email.existingError', [], 'org-team')));
+                        $form->get('email')->addError(new FormError($this->translator->trans('form.email.existingError', [], 'org-team')));
                         break;
 
                     default:
@@ -166,7 +168,7 @@ class TeamController extends AbstractController
             } catch (\Throwable $e) {
                 switch ((int) $e->getCode()) {
                     case 422:
-                        $form->get('email')->addError(new FormError($this->get('translator')->trans('form.email.existingError', [], 'org-team')));
+                        $form->get('email')->addError(new FormError($this->translator->trans('form.email.existingError', [], 'org-team')));
                         break;
 
                     default:
@@ -207,7 +209,7 @@ class TeamController extends AbstractController
                 'An activation email has been sent to the user.'
             );
         } catch (\Throwable $e) {
-            $this->get('logger')->debug($e->getMessage());
+            $this->logger->debug($e->getMessage());
             $request->getSession()->getFlashBag()->add(
                 'error',
                 'An activation email could not be sent.'
@@ -240,7 +242,7 @@ class TeamController extends AbstractController
 
                 $request->getSession()->getFlashBag()->add('notice', 'User account removed');
             } catch (\Throwable $e) {
-                $this->get('logger')->debug($e->getMessage());
+                $this->logger->debug($e->getMessage());
 
                 if ($e instanceof RestClientException && isset($e->getData()['message'])) {
                     $request->getSession()->getFlashBag()->add(

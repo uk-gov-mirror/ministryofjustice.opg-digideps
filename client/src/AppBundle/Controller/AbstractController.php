@@ -19,23 +19,30 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractController extends Controller
 {
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    public $logger;
 
     /**
      * @var RestClient
      */
     public $restClient;
 
-    public function __construct(LoggerInterface $logger, RestClient $restClient)
+    /**
+     * @var TranslatorInterface
+     */
+    public $translator;
+
+    public function __construct(LoggerInterface $logger, RestClient $restClient, TranslatorInterface $translator)
     {
         $this->logger = $logger;
         $this->restClient = $restClient;
+        $this->translator = $translator;
     }
 
     /**
