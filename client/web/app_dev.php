@@ -24,7 +24,6 @@ require_once __DIR__ . '/../app/AppKernel.php';
 $kernel = file_exists(__DIR__ . '/../.enableProdMode')
     ? new AppKernel('test', false)
     : new AppKernel('dev', true);
-$kernel->loadClassCache();
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
