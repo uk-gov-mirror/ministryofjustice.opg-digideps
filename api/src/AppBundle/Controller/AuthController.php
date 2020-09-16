@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace AppBundle\Controller;
 
@@ -8,14 +8,32 @@ use AppBundle\Service\Auth\HeaderTokenAuthenticator;
 use AppBundle\Service\Auth\UserProvider;
 use AppBundle\Service\BruteForce\AttemptsIncrementalWaitingChecker;
 use AppBundle\Service\BruteForce\AttemptsInTimeChecker;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route("/auth")
  */
 class AuthController extends RestController
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    public function __construct(EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage)
+    {
+        $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;
+    }
+
     /**
      * Return the user by email&password or token
      * expected keys in body: 'token' or ('email' and 'password').
@@ -29,8 +47,7 @@ class AuthController extends RestController
         AttemptsInTimeChecker $attemptsInTimechecker,
         AttemptsIncrementalWaitingChecker $incrementalWaitingTimechecker,
         RestInputOuputFormatter $restInputOuputFormatter
-    )
-    {
+    ) {
         if (!$this->getAuthService()->isSecretValid($request)) {
             throw new AppException\UnauthorisedException('client secret not accepted.');
         }
@@ -78,7 +95,7 @@ class AuthController extends RestController
 
         $randomToken = $userProvider->generateRandomTokenAndStore($user);
         $user->setLastLoggedIn(new \DateTime());
-        $this->get('em')->flush($user);
+        $this->entityManager->flush($user);
 
         // add token into response
         $restInputOuputFormatter->addResponseModifier(function ($response) use ($randomToken) {
@@ -113,6 +130,6 @@ class AuthController extends RestController
     {
         $this->setJmsSerialiserGroups(['user']);
 
-        return $this->get('security.token_storage')->getToken()->getUser();
+        return $this->tokenStorage->getToken()->getUser();
     }
 }
