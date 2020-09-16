@@ -17,9 +17,9 @@ use AppBundle\Model\FeedbackReport;
 use AppBundle\Service\CsvGeneratorService;
 use AppBundle\Service\Redirector;
 use AppBundle\Service\ReportSubmissionService;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -85,6 +85,22 @@ class ReportController extends AbstractController
     ];
 
     /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(FormFactoryInterface $formFactory, TranslatorInterface $translator)
+    {
+        $this->formFactory = $formFactory;
+        $this->translator = $translator;
+    }
+
+    /**
      * List of reports.
      *
      * @Route("/lay", name="lay_home")
@@ -130,13 +146,10 @@ class ReportController extends AbstractController
         $report = $this->getReportIfNotSubmitted($reportId);
         $client = $report->getClient();
 
-        /** @var FormFactory */
-        $formFactory = $this->get('form.factory');
-
         /** @var User */
         $user = $this->getUser();
 
-        $editReportDatesForm = $formFactory->createNamed('report_edit', ReportType::class, $report, [ 'translation_domain' => 'report']);
+        $editReportDatesForm = $this->formFactory->createNamed('report_edit', ReportType::class, $report, [ 'translation_domain' => 'report']);
         $returnLink = $user->isDeputyOrg()
             ? $this->generateClientProfileLink($report->getClient())
             : $this->generateUrl('lay_home');
@@ -181,12 +194,11 @@ class ReportController extends AbstractController
         $report = new Report();
         $report->setClient($client);
 
-        /** @var FormFactory */
-        $formFactory = $this->get('form.factory');
-
-        $form = $formFactory->createNamed(
+        $form = $this->formFactory->createNamed(
             'report',
-            ReportType::class, $report, [
+            ReportType::class,
+            $report,
+            [
                 'translation_domain' => 'registration',
                 'action'             => $this->generateUrl('report_create', ['clientId' => $clientId]) //TODO useless ?
             ]
@@ -239,7 +251,6 @@ class ReportController extends AbstractController
                     $activeReportId = $activeReport->getId();
                 }
             }
-
         } else { // Lay. keep the report Id
             $template = 'AppBundle:Report/Report:overview.html.twig';
         }
@@ -316,13 +327,10 @@ class ReportController extends AbstractController
     {
         $report = $this->getReportIfNotSubmitted($reportId, self::$reportGroupsAll);
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         // check status
         $status = $report->getStatus();
         if (!$report->isDue() || !$status->getIsReadyToSubmit()) {
-            $message = $translator->trans('report.submissionExceptions.readyForSubmission', [], 'validators');
+            $message = $this->translator->trans('report.submissionExceptions.readyForSubmission', [], 'validators');
             throw new ReportNotSubmittableException($message);
         }
 
@@ -363,15 +371,12 @@ class ReportController extends AbstractController
     {
         $report = $this->getReport($reportId, ['status']);
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         /** @var User $user */
         $user = $this->getUser();
 
         // check status
         if (!$report->getSubmitted()) {
-            $message = $translator->trans('report.submissionExceptions.submitted', [], 'validators');
+            $message = $this->translator->trans('report.submissionExceptions.submitted', [], 'validators');
             throw new ReportNotSubmittedException($message);
         }
 
@@ -412,12 +417,9 @@ class ReportController extends AbstractController
     {
         $report = $this->getReport($reportId, self::$reportGroupsAll);
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
         // check status
         if (!$report->getSubmitted()) {
-            $message = $translator->trans('report.submissionExceptions.submitted', [], 'validators');
+            $message = $this->translator->trans('report.submissionExceptions.submitted', [], 'validators');
             throw new ReportNotSubmittedException($message);
         }
 
@@ -492,7 +494,8 @@ class ReportController extends AbstractController
         /** @var \DateTime $endDate */
         $endDate = $report->getEndDate();
 
-        $attachmentName = sprintf('DigiRep-%s_%s_%s.pdf',
+        $attachmentName = sprintf(
+            'DigiRep-%s_%s_%s.pdf',
             $endDate->format('Y'),
             $submitDate instanceof \DateTime ? $submitDate->format('Y-m-d') : 'n-a-', //some old reports have no submission date
             $report->getClient()->getCaseNumber()
@@ -530,7 +533,8 @@ class ReportController extends AbstractController
         /** @var \DateTime $endDate */
         $endDate = $report->getEndDate();
 
-        $attachmentName = sprintf('DigiRepTransactions-%s_%s_%s.csv',
+        $attachmentName = sprintf(
+            'DigiRepTransactions-%s_%s_%s.csv',
             $endDate->format('Y'),
             $submitDate instanceof \DateTime ? $submitDate->format('Y-m-d') : 'n-a-', //some old reports have no submission date
             $report->getClient()->getCaseNumber()
