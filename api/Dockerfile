@@ -20,7 +20,7 @@ WORKDIR /var/www
 EXPOSE 80
 EXPOSE 443
 ENV TIMEOUT=20
-ENV PHP_EXT_DIR=/usr/lib/php7/modules
+ENV PHP_EXT_DIR=/usr/local/lib/php/extensions/no-debug-non-zts-20190902
 
 RUN apk --no-cache add \
 postgresql-dev \
@@ -36,9 +36,11 @@ RUN docker-php-ext-install pdo pdo_pgsql opcache
 RUN docker-php-ext-enable opcache
 
 # Install Xdebug if directed to with build arg from docker-compose.yml
-ARG REQUIRE_XDEBUG=false
+ARG REQUIRE_XDEBUG="false"
+
 RUN if [[ $REQUIRE_XDEBUG = "true" ]] ; then \
-        apk add --no-cache php7-pecl-xdebug; \
+        apk add --no-cache $PHPIZE_DEPS; \
+        pecl install xdebug-2.9.8; \
         docker-php-ext-enable $PHP_EXT_DIR/xdebug.so; \
     fi ;
 
@@ -89,8 +91,6 @@ RUN su-exec www-data php -d memory_limit=-1 app/console cache:warmup
 
 # Check for security issues
 RUN su-exec www-data php app/console security:check
-
-RUN echo $DATABASE_HOSTNAME
 
 CMD confd -onetime -backend env \
   && waitforit -address=tcp://$DATABASE_HOSTNAME:$DATABASE_PORT -timeout=$TIMEOUT \

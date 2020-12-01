@@ -34,9 +34,9 @@ class SiriusToLayDeputyshipDtoAssembler implements LayDeputyshipDtoAssemblerInte
         return
             (new LayDeputyshipDto())
                 ->setCaseNumber(DataNormaliser::normaliseCaseNumber($data['Case']))
-                ->setClientSurname($data['Surname'])
+                ->setClientSurname(DataNormaliser::normaliseSurname($data['Surname']))
                 ->setDeputyNumber(DataNormaliser::normaliseDeputyNo($data['Deputy No']))
-                ->setDeputySurname($data['Dep Surname'])
+                ->setDeputySurname(DataNormaliser::normaliseSurname($data['Dep Surname']))
                 ->setDeputyPostcode(DataNormaliser::normalisePostCode($data['Dep Postcode']))
                 ->setTypeOfReport($data['Typeofrep'])
                 ->setCorref($this->determineCorref($data['Typeofrep']))

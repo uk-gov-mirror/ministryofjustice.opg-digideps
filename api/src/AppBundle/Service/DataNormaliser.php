@@ -24,12 +24,12 @@ class DataNormaliser
     {
         $value = trim($value);
         $value = strtolower($value);
-        $value = strtr($value, self::NORMALISE_CHARS);
-
-        // remove MBE suffix
-        $value = preg_replace('/ (mbe|m b e)$/i', '', $value);
-
-        $value = preg_replace('/([^a-z0-9])/i', '', $value);
+//        $value = strtr($value, self::NORMALISE_CHARS);
+//
+//        // remove MBE suffix
+//        $value = preg_replace('/ (mbe|m b e)$/i', '', $value);
+//
+//        $value = preg_replace('/([^a-z0-9])/i', '', $value);
 
         return $value;
     }

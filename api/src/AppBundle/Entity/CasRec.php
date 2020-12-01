@@ -200,9 +200,9 @@ class CasRec
     public function __construct(array $row)
     {
         $this->caseNumber = self::normaliseCaseNumber($row['Case']);
-        $this->clientLastname = $row['Surname'];
+        $this->clientLastname = self::normaliseSurname($row['Surname']);
         $this->deputyNo = self::normaliseDeputyNo($row['Deputy No']);
-        $this->deputySurname = $row['Dep Surname'];
+        $this->deputySurname = self::normaliseSurname($row['Dep Surname']);
         $this->deputyPostCode = self::normaliseSurname($row['Dep Postcode']);
         $this->typeOfReport = self::normaliseCorrefAndTypeOfRep($row['Typeofrep']);
         $this->corref = self::normaliseCorrefAndTypeOfRep($row['Corref']);
@@ -226,11 +226,11 @@ class CasRec
     {
         $value = trim($value);
         $value = strtolower($value);
-        $value = strtr($value, self::$normalizeChars);
-        // remove MBE suffix
-        $value = preg_replace('/ (mbe|m b e)$/i', '', $value);
-        // remove characters that are not a-z or 0-9 or spaces
-        $value = preg_replace('/([^a-z0-9])/i', '', $value);
+//        $value = strtr($value, self::$normalizeChars);
+//        // remove MBE suffix
+//        $value = preg_replace('/ (mbe|m b e)$/i', '', $value);
+//        // remove characters that are not a-z or 0-9 or spaces
+//        $value = preg_replace('/([^a-z0-9])/i', '', $value);
 
         return $value;
     }
