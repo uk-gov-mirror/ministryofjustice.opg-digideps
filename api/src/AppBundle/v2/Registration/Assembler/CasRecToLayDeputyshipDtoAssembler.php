@@ -21,9 +21,9 @@ class CasRecToLayDeputyshipDtoAssembler implements LayDeputyshipDtoAssemblerInte
         return
             (new LayDeputyshipDto())
                 ->setCaseNumber(DataNormaliser::normaliseCaseNumber($data['Case']))
-                ->setClientSurname(DataNormaliser::normaliseSurname($data['Surname']))
+                ->setClientSurname($data['Surname'])
                 ->setDeputyNumber(DataNormaliser::normaliseDeputyNo($data['Deputy No']))
-                ->setDeputySurname(DataNormaliser::normaliseSurname($data['Dep Surname']))
+                ->setDeputySurname($data['Dep Surname'])
                 ->setDeputyPostcode(DataNormaliser::normalisePostCode($data['Dep Postcode']))
                 ->setTypeOfReport($data['Typeofrep'])
                 ->setCorref($data['Corref'])
