@@ -32,6 +32,18 @@ class RegistrationFeatureContext extends BaseFeatureContext
     }
 
     /**
+     * @Given the upload has completed
+     */
+    public function theUploadHasCompleted()
+    {
+        $session = $this->getSession();
+
+        $session->wait(10, "$('.data:visible').length > 0");
+
+        throw new \Exception("The upload process took longer than 10 seconds or failed to complete");
+    }
+
+    /**
      * @When these deputies register to deputise the following court orders:
      */
     public function theseDeputiesRegisterToDeputiseTheFollowingCourtOrders(TableNode $table)

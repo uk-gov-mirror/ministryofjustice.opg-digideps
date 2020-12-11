@@ -128,7 +128,6 @@ default:
             contexts:
                 - DigidepsBehat\ContactDetails\ContactDetailsFeatureContext
 
-
     extensions:
         Behat\MinkExtension\ServiceContainer\MinkExtension:
             goutte:
@@ -142,6 +141,12 @@ default:
                     project: 'Digideps Cross Browser Test - Manual'
             files_path: '%paths.base%/fixtures/'
             default_session: goutte
+            sessions:
+                chrome:
+                    api_url: "http://localhost:9222"
+                    download_behavior: allow
+                    download_path: /download
+                    validate_certificate: false
         Behatch\Extension: ~
 
 cross-browser-chrome:
