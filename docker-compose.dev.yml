@@ -6,12 +6,17 @@ services:
         depends_on:
             - localstack-init
             - mock-sirius-integration
+            - chrome
         volumes:
             - ./behat/tests:/var/www/tests
             - ./behat/snapshots:/tmp/html
         env_file:
             - ./behat/test.env
             - ./behat/.env
+
+    chrome:
+        image: browserless/chrome
+
 
     npm:
         image: node:8-alpine
