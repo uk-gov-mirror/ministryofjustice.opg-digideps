@@ -15,10 +15,8 @@ use AppBundle\Service\CsvUploader;
 use AppBundle\Service\DataImporter\CsvToArray;
 use AppBundle\Service\Logger;
 use AppBundle\Service\OrgService;
-use Predis\Client;
 use Predis\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Redis;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -408,13 +406,21 @@ class IndexController extends AbstractController
             }
         }
 
-        return [
-            'nOfChunks'      => $request->get('nOfChunks'),
-            'source'         => $request->get('source'),
-            'currentRecords' => $this->restClient->get('casrec/count', 'array'),
-            'form'           => $form->createView(),
-            'maxUploadSize'  => min([ini_get('upload_max_filesize'), ini_get('post_max_size')]),
+        $noCunks = $request->get('nOfChunks');
+        $source = $request->get('source');
+        $currentRecords = $this->restClient->get('casrec/count', 'array');
+        $formView = $form->createView();
+        $maxUploadSize = min([ini_get('upload_max_filesize'), ini_get('post_max_size')]);
+
+        $params = [
+            'nOfChunks'      => $noCunks,
+            'source'         => $source,
+            'currentRecords' => $currentRecords,
+            'form'           => $formView,
+            'maxUploadSize'  => $maxUploadSize
         ];
+
+        return $this->render('AppBundle:Admin/Index:uploadUsers.html.twig', $params);
     }
 
     /**

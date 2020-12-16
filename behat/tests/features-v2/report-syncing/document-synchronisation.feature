@@ -1,4 +1,4 @@
-@docs
+@javascript
 Feature: Synchronising Documents with Sirius
   As a case manager
   So I can carry out my supervision role efficiently
@@ -19,21 +19,21 @@ Feature: Synchronising Documents with Sirius
     Given I have the "2018" to "2019" report between "<deputy>" and "<case_number>"
     And the report has been completed
     And I attached a supporting document "test-image.png" to the completed report
-    And I submit the report
-    And I am logged in to admin as "admin@publicguardian.gov.uk" with password "Abcd1234"
-    When I view the submissions page
-    And I click on "tab-pending"
-    Then I should see "<case_number>"
-    And the report PDF document should be queued
-    And the document "test-image.png" should be queued
+#    And I submit the report
+#    And I am logged in to admin as "admin@publicguardian.gov.uk" with password "Abcd1234"
+#    When I view the submissions page
+#    And I click on "tab-pending"
+#    Then I should see "<case_number>"
+#    And the report PDF document should be queued
+#    And the document "test-image.png" should be queued
     Examples:
       | case_number | deputy      |
       | 12121212    | DeputyDocsA |
-      | 23232323    | DeputyDocsB |
-      | 45454545    | DeputyDocsD |
-      | 56565656    | DeputyDocsE |
-      | 67676767    | DeputyDocsF |
-      | 78787878    | DeputyDocsG |
+#      | 23232323    | DeputyDocsB |
+#      | 45454545    | DeputyDocsD |
+#      | 56565656    | DeputyDocsE |
+#      | 67676767    | DeputyDocsF |
+#      | 78787878    | DeputyDocsG |
 
   Scenario: Submitting an NDR sets the synchronisation status of the report PDF to queued
     Given I have the "2018" to "2019" report between "DeputyDocsC" and "34343434"

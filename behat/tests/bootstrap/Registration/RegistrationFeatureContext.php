@@ -36,11 +36,14 @@ class RegistrationFeatureContext extends BaseFeatureContext
      */
     public function theUploadHasCompleted()
     {
-        $session = $this->getSession();
+        $session = $this->getSession('js_enabled');
 
-        $session->wait(10, "$('.data:visible').length > 0");
+        $uploadResultsVisible = $session->wait(10, "document.querySelectorAll('.data').length > 0");
+//        $uploadResultsVisible = $session->wait(10);
 
-        throw new \Exception("The upload process took longer than 10 seconds or failed to complete");
+        if (!$uploadResultsVisible) {
+            throw new \Exception("The upload process took longer than 10 seconds or failed to complete");
+        }
     }
 
     /**

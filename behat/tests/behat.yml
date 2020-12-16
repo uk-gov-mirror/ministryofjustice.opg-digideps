@@ -129,25 +129,41 @@ default:
                 - DigidepsBehat\ContactDetails\ContactDetailsFeatureContext
 
     extensions:
+        Behatch\Extension: ~
+        DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
         Behat\MinkExtension\ServiceContainer\MinkExtension:
-            goutte:
-                guzzle_parameters:
-                    verify: false
+            files_path: '%paths.base%/fixtures/'
+            default_session: default
+            javascript_session: js_enabled
+            browser_name: chrome
             browser_stack:
                 capabilities:
                     browserstack-debug: true
                     browserstack-tunnel: true
                     acceptSslCerts: true
                     project: 'Digideps Cross Browser Test - Manual'
-            files_path: '%paths.base%/fixtures/'
-            default_session: goutte
             sessions:
-                chrome:
-                    api_url: "http://localhost:9222"
-                    download_behavior: allow
-                    download_path: /download
-                    validate_certificate: false
-        Behatch\Extension: ~
+                js_enabled:
+#                    selenium2:
+#                        wd_host: 'http://selenium-hub:4444/wd/hub'
+#                        capabilities:
+#                            marionette: null
+#                            browser: 'chrome'
+#                            browserName: 'chrome'
+#                            extra_capabilities:
+#                                goog.chromeOptions:
+#                                    args: [ '--headless', '--disable-gpu' ]
+#                                    w3c: false
+                    chrome:
+                        api_url: "http://chrome:9222"
+                        validate_certificate: false
+                        socket_timeout: 20
+                        download_behavior: 'allow'
+                        dom_wait_timeout: 20
+                default:
+                    goutte:
+                        guzzle_parameters:
+                            verify: false
 
 cross-browser-chrome:
     suites:

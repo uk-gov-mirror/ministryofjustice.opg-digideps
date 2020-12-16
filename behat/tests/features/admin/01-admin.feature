@@ -1,5 +1,5 @@
 Feature: admin / admin
-  @infra
+  @infra  @javascript
   Scenario: login as admin
     Given I am logged in to admin as "admin@publicguardian.gov.uk" with password "Abcd1234"
     Then I should be on "/admin/"

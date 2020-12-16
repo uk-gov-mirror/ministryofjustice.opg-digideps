@@ -2,11 +2,13 @@ version: '3.2'
 
 services:
     test:
-        build: ./behat
+        build:
+            context: ./behat
+            dockerfile: Dockerfile.behat
         depends_on:
+            - chrome
             - localstack-init
             - mock-sirius-integration
-            - chrome
         volumes:
             - ./behat/tests:/var/www/tests
             - ./behat/snapshots:/tmp/html
@@ -14,9 +16,29 @@ services:
             - ./behat/test.env
             - ./behat/.env
 
-    chrome:
-        image: browserless/chrome
+#    selenium-hub:
+#        image: selenium/hub:3.141.59-20201119
+#        ports:
+#            - "4444:4444"
 
+#    chrome:
+#        image: selenium/node-chrome:3.141.59-20201119
+#        volumes:
+#            - /dev/shm:/dev/shm
+#        depends_on:
+#            - selenium-hub
+#        environment:
+#            - HUB_HOST=selenium-hub
+#            - HUB_PORT=4444
+
+    chrome:
+        build:
+            context: ./behat
+            dockerfile: Dockerfile.chrome
+        cap_add:
+            - SYS_ADMIN
+        ports:
+            - 9222:9222
 
     npm:
         image: node:8-alpine
